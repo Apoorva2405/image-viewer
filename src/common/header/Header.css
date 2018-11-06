@@ -1,0 +1,15 @@
+.app-header {
+    background-color: #263238;
+    height: 36px;
+    padding: 8px 32px 8px 16px;
+}
+
+.app-logo {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    color:  #fff;
+    margin: auto;
+    text-decoration: none;
+    text-align: left;  
+    padding: 8px 0px;
+}
