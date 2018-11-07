@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './Header.css';
 
+/*Header component for all screens */
 class Header extends Component {
     render() {
         return (
