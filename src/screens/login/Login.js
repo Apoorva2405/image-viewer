@@ -35,12 +35,31 @@ class Login extends Component {
             username: "",
             loginPasswordRequired: "dispNone",
             loginPassword: "",
+            incorrectLoginDetails: "dispNone",
         };
     }
 
     loginClickHandler = () => {
         this.state.username === "" ? this.setState({ usernameRequired: "dispBlock" }) : this.setState({ usernameRequired: "dispNone" });
         this.state.loginPassword === "" ? this.setState({ loginPasswordRequired: "dispBlock" }) : this.setState({ loginPasswordRequired: "dispNone" });
+   
+        // Variables declared for login
+        var username = "UpgradUser" ;
+        var password = "upgrad@123" ;
+        var accessToken = "8800839957.a7c5df0.f9d82aafa9b14b79995ee88edf671444" ;
+
+        // If Username & Password are same then redirect it to Home Page
+        if( (username === this.state.username) && (password === this.state.loginPassword)  ){
+            console.log( "redirect to home page");       
+        } else {
+            // If Username & Password null then display required error message
+            if( this.state.username === ""  ||  this.state.loginPassword === ""){
+                  this.setState({ incorrectLoginDetails: "dispNone" })
+            } else {
+                // Otherwise display incorrect details error message
+                this.setState({ incorrectLoginDetails: "dispBlock" })
+            }
+        }
     }
     inputUsernameChangeHandler = (e) => {
         this.setState({ username: e.target.value });
@@ -74,9 +93,13 @@ class Login extends Component {
                             <FormHelperText className={this.state.loginPasswordRequired}>
                                 <span className="red">required</span>
                             </FormHelperText>
+                            <FormHelperText className={this.state.incorrectLoginDetails}>
+                                <span className="red">Incorrect username and/or password</span>
+                            </FormHelperText>
                         </FormControl>
                         <br /><br />
                         <Button variant="contained" color="primary" onClick={this.loginClickHandler}>LOGIN</Button>
+                        
                     </CardContent>
                 </Card>
             </div>
