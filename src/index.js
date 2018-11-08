@@ -1,10 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import Login from './screens/login/Login';
+import registerServiceWorker from './registerServiceWorker';
 
-ReactDOM.render(
-    <span>
-        Image Viewer
-    </span>, 
-    document.getElementById('root')
-);
+/*Rendering Login component as home page*/ 
+ReactDOM.render(<Login />, document.getElementById('root'));
+registerServiceWorker();
