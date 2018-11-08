@@ -17,7 +17,7 @@ class Home extends Component {
     render() {
         return (
             <div className="home">
-                <Header />
+                <Header  showSearchLogo="true" />
                 <div> HOME PAGE </div>
                
             </div>

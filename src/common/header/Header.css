@@ -17,3 +17,11 @@
     text-align: left;  
     padding: 8px 0px;
 }
+
+
+.search-box {
+    border-radius: 4px;
+    width: 300 px;
+    background-color: "#c0c0c0" ;
+    text-align: center ;
+}
