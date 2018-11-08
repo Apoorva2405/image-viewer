@@ -1,0 +1,14 @@
+/*CSS file for Login component*/
+
+/*red class contains the style properties of <span> tag in Login.js*/
+.red {
+    color: red;
+}
+/*dispNone class contains the style properties of username & password in Login.js*/
+.dispNone {
+    display: none;
+}
+/*dispBlock class contains the style properties of <header> tag in Login.js*/
+ .dispBlock {
+    display: block;
+}
