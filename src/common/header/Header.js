@@ -1,129 +1,187 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
 import SearchIcon from '@material-ui/icons/Search';
 import InputBase from '@material-ui/core/InputBase';
 import { withStyles } from '@material-ui/core/styles';
 import Avatar from '@material-ui/core/Avatar';
+import MenuItem from '@material-ui/core/MenuItem';
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
+import Grow from '@material-ui/core/Grow';
+import Popper from '@material-ui/core/Popper';
+import MenuList from '@material-ui/core/MenuList';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import deepOrange from '@material-ui/core/colors/deepOrange';
 import './Header.css';
 
 
 const styles = theme => ({
-    palette: {
-        primary: '#f44336',
-        secondary: {
-          main: '#f44336',
-        },
+  root: {
+    width: '100%',
+  },
+  menuroot: {
+    display: 'flex',
+  },
+  grow: {
+    flexGrow: 1,
+  },
+  title: {
+    display: 'none',
+    [theme.breakpoints.up('sm')]: {
+      display: 'block',
     },
-    root: {
-      width: '100%',
-    },
-    grow: {
-      flexGrow: 1,
-    },
-    title: {
-      display: 'none',
-      [theme.breakpoints.up('sm')]: {
-        display: 'block',
+  },
+  search: {
+    position: 'relative',
+    borderRadius: '4px',
+    backgroundColor: '#c0c0c0',
+    marginRight: 10,
+    width: '300px',
+  },
+  searchIcon: {
+    width: theme.spacing.unit * 6,
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: 'black',
+  },
+  inputRoot: {
+    width: '100%',
+  },
+  inputInput: {
+    paddingTop: theme.spacing.unit,
+    paddingRight: theme.spacing.unit,
+    paddingBottom: theme.spacing.unit,
+    paddingLeft: theme.spacing.unit * 5,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+      width: 120,
+      '&:focus': {
+        width: 200,
       },
     },
-    search: {
-      position: 'relative',
-      borderRadius: '4px',
-      backgroundColor: '#c0c0c0',
-      marginLeft: 0,
-      width: '300px',
-    },
-    searchIcon: {
-      width: theme.spacing.unit * 6,
-      height: '100%',
-      position: 'absolute',
-      pointerEvents: 'none',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      color:'black',
-    },
-    inputRoot: {
-      width: '100%',
-    },
-    inputInput: {
-      paddingTop: theme.spacing.unit,
-      paddingRight: theme.spacing.unit,
-      paddingBottom: theme.spacing.unit,
-      paddingLeft: theme.spacing.unit * 5,
-      transition: theme.transitions.create('width'),
-      width: '100%',
-      [theme.breakpoints.up('sm')]: {
-        width: 120,
-        '&:focus': {
-          width: 200,
-        },
-      },
-    },
-    avatar: {
-        margin: 10,
-      },
-  });
-  
+  },
+  orangeAvatar: {
+    color: '#fff',
+    backgroundColor: deepOrange[500],
+    marginRight:10,
+  },
+  menuList:{
+  backgroundColor: '#c0c0c0',
+  }
+});
+
+const theme = createMuiTheme({
+  palette: {
+    primary: { main: '#263238' }, // For header background.
+    secondary: { main: '#fff' }, // For text on header. 
+  },
+});
+
+
+
 /*Header component for all screens */
 class Header extends Component {
 
-    state = {
-        query: '',
-    }
+  state = {
+    query: '',
+  }
 
-    handleInputChange = () => {
-        this.setState({
-            query: this.search.value
-        })
-    }
-
-
-    render() {
-        const { anchorEl } = this.state;
-    const { classes } = this.props;
-    const isMenuOpen = Boolean(anchorEl);
-        return (
-            <div>
-                <header >
-                     {this.props.showSearchLogo === "true" ?  
-                        <div className={classes.root}>
-                        <AppBar position="static" color='primary'>
-                          <Toolbar>
-                            <Typography className={classes.title} variant="h6" noWrap>
-                            Image Viewer
-                            </Typography>
-                            <div className={classes.grow} />
-                            <div className={classes.search}>
-                              <div className={classes.searchIcon}>
-                                <SearchIcon />
-                              </div>
-                              <InputBase
-                                placeholder="Search…"
-                                classes={{
-                                  root: classes.inputRoot,
-                                  input: classes.inputInput,
-                                }}
-                              />
-                            </div>
-                            <IconButton>
-                            <Avatar alt="Remy Sharp" src="/static/images/remy.jpg" className={classes.avatar} />
-                            </IconButton>
-                            </Toolbar>
-                        </AppBar>
-                      </div>
-                    : <div className="app-header">
-                    <p className="app-logo">Image Viewer</p>
-                </div>}
-     
-                </header>
-            </div>
-        )
-    }
-}
+  handleInputChange = () => {
+    this.setState({
+      query: this.search.value
+    })
+  };
   
-  export default withStyles(styles)(Header);
+  handleToggle = () => {
+    this.setState(state => ({ open: !state.open }));
+  };
+
+  handleClose = event => {
+    if (this.anchorEl.contains(event.target)) {
+      return;
+    }
+
+    this.setState({ open: false });
+  };
+
+  render() {
+    const { classes } = this.props;
+    const { open } = this.state;
+    return (
+      <div>
+        <header >
+          {this.props.showSearchLogo === "true" ?
+            <div className={classes.root}>
+              <MuiThemeProvider theme={theme}>
+                <AppBar position="static" color='primary'>
+                  <Toolbar>
+                    <p className="app-logo">Image Viewer</p>
+                    <div className={classes.grow} />
+                    <div className={classes.search}>
+                      <div className={classes.searchIcon}>
+                        <SearchIcon />
+                      </div>
+                      <InputBase
+                        placeholder="Search…"
+                        classes={{
+                          root: classes.inputRoot,
+                          input: classes.inputInput,
+                        }}
+                      />
+                    </div>
+                    <IconButton buttonRef={node => {
+              this.anchorEl = node;
+            }}
+            aria-owns={open ? 'menu-list-grow' : undefined}
+            aria-haspopup="true"
+            onClick={this.handleToggle}>
+                      <Avatar className={classes.orangeAvatar} >S</Avatar>
+                    </IconButton>
+                    <div className={classes.menuroot}>
+          <Popper open={open} anchorEl={this.anchorEl} transition disablePortal>
+            {({ TransitionProps, placement }) => (
+              <Grow
+                {...TransitionProps}
+                id="menu-list-grow"
+                style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
+              >
+                
+                  <ClickAwayListener onClickAway={this.handleClose}>
+                    <MenuList className={classes.menuList}>
+                      <MenuItem onClick={this.handleClose} >My Account</MenuItem>
+                      <hr/>
+                      <MenuItem onClick={this.handleClose} >Logout</MenuItem>
+                    </MenuList>
+                  </ClickAwayListener>
+            
+              </Grow>
+            )}
+          </Popper>
+          </div>
+                  </Toolbar>
+                </AppBar>
+              </MuiThemeProvider>
+            </div>
+            : <div className={classes.root}>
+              <MuiThemeProvider theme={theme}>
+                <AppBar position="static" color='primary'>
+                  <Toolbar>
+                    <p className="app-logo">Image Viewer</p>
+                  </Toolbar>
+                </AppBar>
+              </MuiThemeProvider>
+            </div>}
+
+        </header>
+      </div>
+    )
+  }
+}
+
+export default withStyles(styles)(Header);
