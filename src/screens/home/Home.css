@@ -29,11 +29,37 @@
 }
 
 .right {
+    padding-left: 10px;
+}
+
+.likes {
     padding-top: 20px;
-    width: 24%;
+    width: 100%;
+    padding-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.comments {
+    width: 90%;
+    margin-bottom: 50px;
+}
+
+.red {
+    color: red;
+}
+
+.transparent {
+   color: black;
+}
+
+.button {
+    float: right;
+    width: 10%;
 }
 
 .tags {
+    display: flex;
     color: blue;
 }
 

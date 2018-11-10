@@ -2,41 +2,18 @@ import React, { Component } from 'react';
 import Header from '../../common/header/Header';
 import CardHeader from '@material-ui/core/CardHeader';
 import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
-import { withStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
-import GridListTileBar from '@material-ui/core/GridListTileBar';
 import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import FavoriteIcon from '@material-ui/icons/FavoriteBorder';
-import TextField from '@material-ui/core/TextField';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
-import FormHelperText from '@material-ui/core/FormHelperText';
 import Button from '@material-ui/core/Button';
 import './Home.css';
-
-const styles = theme => ({
-    card: {
-        margin: 'auto',
-        width: '33.33%'
-    },
-    content: {
-        paddingTop: '10%',
-        textAlign: 'left',
-    },
-    buttonClass: {
-        paddingTop: '10%'
-    },
-    input: {
-        margin: '10%',
-    },
-});
 
 class Home extends Component {
     constructor() {
@@ -46,25 +23,52 @@ class Home extends Component {
             username:"",
             profile_pic:"",
             uploaded_pics:[],
-            dispLiked: "red",
             hashtags:[],
+            comments: [],
             likes:"",
             date:"",
             caption:"",
-            url:""
+            url:"",
+            active: false,
+            dispColor: "transparent",
+            likesCount: ""
         }
     }
 
-    iconClickHandler = () => {
- 
-    }
+    iconClickHandler = (count) => {
+        const currentState = this.state.active;
+        this.setState({ active: !currentState });
+        if (this.state.active == false) {
+            count = count + 1;
+            this.setState({ 
+                dispColor: "red",
+                likesCount: count
+            })
+        } 
+        else {
+            this.setState({ 
+                dispColor: "transparent",
+                likesCount: count
+            })
+        }
+}
 
     commentClickHandler = () => {
 
     }
 
+    inputCommentChangeHandler = (e, index) => {
+        var comments = this.state.comments.slice();
+        console.log("value "+e.target.value);
+        console.log("index "+index);
+        //comments[index] = e.target.value;
+       // this.setState({comments: comments});
+    }
+
+    
+
     componentDidMount() {
-        let currentState = this.state;
+        // let currentState = this.state;
         console.log(this.props.accessToken) ;
         sessionStorage.setItem("access-token", this.props.accessToken);
     }
@@ -76,6 +80,7 @@ class Home extends Component {
         let that = this;
         xhr.addEventListener("readystatechange", function () {
             if (this.readyState === 4) {
+                console.log("response "+xhr.responseText);
                 that.setState({
                     profile_pic: JSON.parse(this.responseText).data.profile_picture,
                     username: JSON.parse(this.responseText).data.username
@@ -92,12 +97,15 @@ class Home extends Component {
             if (this.readyState === 4) {
                 var dateReceived = JSON.parse(this.responseText).data[0].created_time;
                 var pics = JSON.parse(this.responseText).data[0];
+                var liked = JSON.parse(this.responseText).data[0].likes.count;
                 that.setState({
                     date: new Date(Number(dateReceived)).toISOString(),
                     uploaded_pics: JSON.parse(this.responseText).data,
+                    hashtags: JSON.parse(this.responseText).data.tags,
+                    likes: JSON.parse(this.responseText).data.likes,
                     url: JSON.parse(this.responseText).data[0].images.standard_resolution.url
                 });
-             }
+            }
         });
 
         xhrPic.open("GET", "https://api.instagram.com/v1/users/self/media/recent/?access_token=8800839957.a7c5df0.f9d82aafa9b14b79995ee88edf671444");
@@ -107,7 +115,7 @@ class Home extends Component {
 
 
     render() {
-        const { classes } = this.props;
+       // const { classes } = this.props;
         return (
             <div className="home">
                 <Header showSearchLogo="true" />
@@ -124,26 +132,37 @@ class Home extends Component {
                             subheader = {this.state.date}
                             />
                             <CardContent>
-                                <img src={pic.images.standard_resolution.url} alt="image"/>
+                                <img src={pic.images.standard_resolution.url} alt="pic"/>
                                 <Divider inset component="li" />
                                 <Typography variant="subtitle1">
                                     {pic.caption.text}
                                 </Typography>
-                                <Typography>
-                                    {pic.tags}
-                                </Typography>
-                                <div>
-                                <FavoriteIcon
-                                 onClick={() => this.iconClickHandler()}>
-                                </FavoriteIcon>
-                                <Typography>{pic.likes.count} likes</Typography>
+                                <div className="tags">
+                                {pic.tags.map(tag => (
+                                    <Typography style={{color: '#29B6F6'}}>
+                                        #{tag}
+                                    </Typography>
+                                ))}
                                 </div>
-                                <FormControl>
+                                <div className="likes">
+                                <FavoriteIcon fontSize="large"
+                                className={this.state.dispColor}
+                                 onClick={() => this.iconClickHandler(pic.likes.count)}>
+                                </FavoriteIcon>
+                                <Typography className="right">{this.state.likesCount == "" ? pic.likes.count : this.state.likesCount} likes</Typography>
+                                </div>
+                                <div>
+                                <Typography>
+                                    {this.state.comments}
+                                </Typography>
+                                </div>
+                                <FormControl className="comments">
                                     <InputLabel htmlFor="comment">Add a comment</InputLabel>
                                     <Input id="comment" type="text"
+                                        comment={this.state.comment}
                                         onChange={this.inputCommentChangeHandler} />
-                                    <Button variant="contained" color="primary" onClick={this.commentClickHandler}>Add</Button>
-                                </FormControl>  
+                                </FormControl> 
+                                <Button className="button"variant="contained" color="primary" onClick={this.commentClickHandler}>Add</Button> 
                             </CardContent>
                         </Card>
                         </GridListTile>
