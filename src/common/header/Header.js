@@ -16,6 +16,7 @@ import deepOrange from '@material-ui/core/colors/deepOrange';
 import './Header.css';
 import ReactDOM from 'react-dom'; 
 import Login from '../../screens/login/Login';
+import Profile from '../../screens/profile/Profile';
 
 const styles = theme => ({
   root: {
@@ -128,6 +129,10 @@ class Header extends Component {
 
   }
 
+  myAccountHandler = event => {
+     // Redirecting to profile page with accessToken Set
+     ReactDOM.render(<Profile />, document.getElementById('root'));
+  }
  
   render() {
     const { classes } = this.props;
@@ -173,15 +178,17 @@ class Header extends Component {
                 
                   <ClickAwayListener onClickAway={this.handleClose}>
                     <MenuList className={classes.menuList}>
-                      <MenuItem onClick={this.handleClose} >My Account</MenuItem>
+
+                      {/* On clicking login , calling my account handler */}
+                      <MenuItem onClick={this.myAccountHandler} >My Account</MenuItem>
                       <hr/>
 
-                      /* On clicking logout, calling logout handler */                    
+                      {/* On clicking logout, calling logout handler */}                 
                       <MenuItem onClick={this.logoutHandler} >Logout</MenuItem>
 
                     </MenuList>
                   </ClickAwayListener>
-            
+           
               </Grow>
             )}
           </Popper>
