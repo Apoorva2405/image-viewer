@@ -14,7 +14,8 @@ import MenuList from '@material-ui/core/MenuList';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import deepOrange from '@material-ui/core/colors/deepOrange';
 import './Header.css';
-
+import ReactDOM from 'react-dom'; 
+import Login from '../../screens/login/Login';
 
 const styles = theme => ({
   root: {
@@ -108,8 +109,26 @@ class Header extends Component {
     }
 
     this.setState({ open: false });
+
   };
 
+
+  logoutHandler = event  => {
+    console.log("inside logout");
+    // Removing accesstoken in session storage on clicking logout 
+    sessionStorage.removeItem("access-token");
+
+    this.setState({
+        loggedIn: false
+    });
+    console.log("cleared session storage");
+    
+    // Redirecting to home page with accessToken Set
+     ReactDOM.render(<Login />, document.getElementById('root'));
+
+  }
+
+ 
   render() {
     const { classes } = this.props;
     const { open } = this.state;
@@ -156,7 +175,10 @@ class Header extends Component {
                     <MenuList className={classes.menuList}>
                       <MenuItem onClick={this.handleClose} >My Account</MenuItem>
                       <hr/>
-                      <MenuItem onClick={this.handleClose} >Logout</MenuItem>
+
+                      /* On clicking logout, calling logout handler */                    
+                      <MenuItem onClick={this.logoutHandler} >Logout</MenuItem>
+
                     </MenuList>
                   </ClickAwayListener>
             
