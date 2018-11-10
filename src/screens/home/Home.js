@@ -35,20 +35,23 @@ class Home extends Component {
         }
     }
 
-    iconClickHandler = (count) => {
+    iconClickHandler = (count, id) => {
         const currentState = this.state.active;
         this.setState({ active: !currentState });
+        var update_pics = this.state.uploaded_pics;
         if (this.state.active == false) {
+            update_pics[id].likes.count += 1;
             count = count + 1;
             this.setState({ 
                 dispColor: "red",
-                likesCount: count
+                uploaded_pics: update_pics
             })
         } 
         else {
+            update_pics[id].likes.count -= 1;
             this.setState({ 
                 dispColor: "transparent",
-                likesCount: count
+                uploaded_pics: update_pics
             })
         }
 }
@@ -121,7 +124,7 @@ class Home extends Component {
                 <Header showSearchLogo="true" />
                 <div  className="flex-container">
                 <GridList cellHeight="100%" cols={2}>
-                  {this.state.uploaded_pics.map(pic => (
+                  {this.state.uploaded_pics.map((pic, index) => (
                       <GridListTile>
                         <Card>
                             <CardHeader
@@ -146,10 +149,11 @@ class Home extends Component {
                                 </div>
                                 <div className="likes">
                                 <FavoriteIcon fontSize="large"
+                                key={"pic" + pic.id}
                                 className={this.state.dispColor}
-                                 onClick={() => this.iconClickHandler(pic.likes.count)}>
+                                 onClick={() => this.iconClickHandler(pic.likes.count,index)}>
                                 </FavoriteIcon>
-                                <Typography className="right">{this.state.likesCount == "" ? pic.likes.count : this.state.likesCount} likes</Typography>
+                                <Typography key={"pic" + pic.id} className="right">{pic.likes.count} likes</Typography>
                                 </div>
                                 <div>
                                 <Typography>
