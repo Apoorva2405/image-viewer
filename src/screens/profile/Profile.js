@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Header from '../../common/header/Header';
 
-class Home extends Component {
+class Profile extends Component {
     constructor() {
         super();
         this.state = {
@@ -10,18 +10,18 @@ class Home extends Component {
     }
     componentDidMount() {
       //  let currentState = this.state;
-        console.log(this.props.accessToken) ;
-        sessionStorage.setItem("access-token", this.props.accessToken);
+        console.log(sessionStorage.getItem("access-token")) ;
+      //  sessionStorage.setItem("access-token", this.props.accessToken);
 
     }
     render() {
         return (
-            <div className="home">
-                <Header  showSearchLogo="true" />
-                <div> HOME PAGE </div>
+            <div className="profile">
+                <Header  showProfileLogo="true" />
+                <div> PROFILE PAGE </div>
                
             </div>
         )
     }
 }
-export default Home;
+export default Profile;
