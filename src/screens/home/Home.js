@@ -123,7 +123,7 @@ class Home extends Component {
                 <GridList cellHeight="100%" cols={2}>
                   {this.state.uploaded_pics.map((pic, index) => (
                       <GridListTile>
-                        <Card>
+                        <Card className= "gridList">
                             <CardHeader
                             avatar={
                                 <Avatar src={this.state.profile_pic} alt="profile"/>
