@@ -16,8 +16,23 @@
     background: grey;
 }
 
+.home {
+    display: 'flex';
+    flex-wrap: 'wrap';
+    justify-content: 'space-around';
+    overflow: 'hidden';
+}
+
+.gridList {
+    margin: 30px;
+    width: 80%;
+}
+
 .flex-container {
     display: flex;
+    justify-content: 'flex-start';
+    border-width: 20px;
+    border-color: black;
 }
 
 .flex-container>div {
@@ -41,7 +56,7 @@
 }
 
 .comments {
-    width: 90%;
+    width: 87%;
     margin-bottom: 50px;
 }
 
