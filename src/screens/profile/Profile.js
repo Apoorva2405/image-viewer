@@ -42,16 +42,8 @@ class Profile extends Component {
         });
         
         xhr.open("GET",  "https://api.instagram.com/v1/users/self/?access_token=" + sessionStorage.getItem("access-token"));
-        xhr.send(data);
-
-
-
-       
+        xhr.send(data);       
     }
-
-
-
-
 
     render() {
         return (
