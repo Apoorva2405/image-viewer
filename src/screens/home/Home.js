@@ -39,7 +39,7 @@ class Home extends Component {
         const currentState = this.state.active;
         this.setState({ active: !currentState });
         var update_pics = this.state.uploaded_pics;
-        if (this.state.active == false) {
+        if (this.state.active === false) {
             update_pics[id].likes.count += 1;
             count = count + 1;
             this.setState({ 
@@ -61,7 +61,7 @@ class Home extends Component {
     }
 
     inputCommentChangeHandler = (e, index) => {
-        var comments = this.state.comments.slice();
+       // var comments = this.state.comments.slice();
         console.log("value "+e.target.value);
         console.log("index "+index);
         //comments[index] = e.target.value;
@@ -98,8 +98,6 @@ class Home extends Component {
         xhrPic.addEventListener("readystatechange", function () {
             if (this.readyState === 4) {
                 var dateReceived = JSON.parse(this.responseText).data[0].created_time;
-                var pics = JSON.parse(this.responseText).data[0];
-                var liked = JSON.parse(this.responseText).data[0].likes.count;
                 that.setState({
                     date: new Date(Number(dateReceived)).toISOString(),
                     uploaded_pics: JSON.parse(this.responseText).data,
