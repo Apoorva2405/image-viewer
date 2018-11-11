@@ -101,7 +101,9 @@ class Header extends Component {
   };
   
   handleToggle = () => {
-    this.setState(state => ({ open: !state.open }));
+    //this.setState(state => ({ open: !state.open }));
+    // Redirecting to profile page with accessToken Set
+    ReactDOM.render(<Profile />, document.getElementById('root'));
   };
 
   handleClose = event => {
@@ -124,7 +126,7 @@ class Header extends Component {
     });
     console.log("cleared session storage");
     
-    // Redirecting to home page with accessToken Set
+    // Redirecting to Login page
      ReactDOM.render(<Login />, document.getElementById('root'));
 
   }
