@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import Header from '../../common/header/Header';
+import CardHeader from '@material-ui/core/CardHeader';
+import Card from '@material-ui/core/Card';
+import Avatar from '@material-ui/core/Avatar';
+
 
 class Profile extends Component {
     constructor() {
         super();
         this.state = {
-            accessToken: "",
             username:"",
             profile_pic:"",
             media:"",
@@ -17,14 +20,6 @@ class Profile extends Component {
 
     componentDidMount() {
         console.log(sessionStorage.getItem("access-token")) ;   
-    /*  this.setState( { accessToken : sessionStorage.getItem("access-token") } ) ;
-          
-       console.log(this.state.profile_pic);
-       console.log(this.state.accessToken) ; */
-
-       this.state.accessToken = sessionStorage.getItem("access-token") ;
-       console.log(this.state.accessToken) ;
-       console.log("here");
     }
 
     componentWillMount() {
@@ -37,38 +32,21 @@ class Profile extends Component {
                 console.log("response "+xhr.responseText);
                 that.setState({
                     profile_pic: JSON.parse(this.responseText).data.profile_picture,
-                    username: JSON.parse(this.responseText).data.username
+                    username: JSON.parse(this.responseText).data.username,
+                    full_name: JSON.parse(this.responseText).data.full_name,
+                    media:  JSON.parse(this.responseText).data.counts.media,
+                    follows : JSON.parse(this.responseText).data.counts.follows,
+                    followed_by : JSON.parse(this.responseText).data.counts.followed_by
                 });
              }
         });
-        let bearerToken = this.state.accessToken ;
-        console.log(bearerToken);
-        let url = "https://api.instagram.com/v1/users/self/?access_token="+bearerToken  ;
-        console.log("new url")
-        console.log(url);
-      
-        xhr.open("GET", url);
+        
+        xhr.open("GET",  "https://api.instagram.com/v1/users/self/?access_token=" + sessionStorage.getItem("access-token"));
         xhr.send(data);
 
 
 
-        // get pictures
-       /* let xhrPic = new XMLHttpRequest();
-        xhrPic.addEventListener("readystatechange", function () {
-            if (this.readyState === 4) {
-                var dateReceived = JSON.parse(this.responseText).data[0].created_time;
-                that.setState({
-                    date: new Date(Number(dateReceived)).toISOString(),
-                    uploaded_pics: JSON.parse(this.responseText).data,
-                    hashtags: JSON.parse(this.responseText).data.tags,
-                    likes: JSON.parse(this.responseText).data.likes,
-                    url: JSON.parse(this.responseText).data[0].images.standard_resolution.url
-                });
-            }
-        });
-
-        xhrPic.open("GET", "https://api.instagram.com/v1/users/self/media/recent/?access_token=8800839957.a7c5df0.f9d82aafa9b14b79995ee88edf671444");
-        xhrPic.send(data); */
+       
     }
 
 
@@ -80,7 +58,15 @@ class Profile extends Component {
             <div className="profile">
                 <Header  showProfileLogo="true" />
                 <div> PROFILE PAGE </div>
-
+                <Card>
+                            <CardHeader
+                            avatar={
+                                <Avatar src={this.state.profile_pic} alt="profile"/>
+                            }
+                            title={this.state.username}
+                            subheader={this.state.media}
+                            />
+                </Card>
 
     
                
