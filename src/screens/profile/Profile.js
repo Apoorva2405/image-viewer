@@ -11,6 +11,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 
 import Button from '@material-ui/core/Button';
+import Modal from 'react-modal';
 
 const styles = theme => ({
     card: {
@@ -39,8 +40,6 @@ const styles = theme => ({
   });
 
 class Profile extends Component {
-   
-
     constructor() {
         super();
         this.state = {
@@ -49,7 +48,8 @@ class Profile extends Component {
             media:"",
             follows:"",
             followed_by:"",
-            full_name:""
+            full_name:"",
+            modalIsOpen : false
         }
     }
 
@@ -80,6 +80,16 @@ class Profile extends Component {
         xhr.send(data);       
     }
 
+     /*
+        Function to open modal.
+    */
+   openModalHandler = () => {
+    this.setState({ modalIsOpen : true } ) 
+    }
+
+    closeModalHandler = () => {
+        this.setState({ modalIsOpen : false }) 
+    }
 
     render() {
         const { classes } = this.props;
@@ -112,7 +122,7 @@ class Profile extends Component {
                 {this.state.full_name}
           </Typography>
           
-          <Button variant="fab" mini color="secondary" aria-label="Edit" className={classes.button}>
+          <Button variant="fab" mini color="secondary" aria-label="Edit" className={classes.button} onClick={this.openModalHandler} >
           <EditIcon />
           </Button>
         </CardContent>
@@ -120,6 +130,10 @@ class Profile extends Component {
         </div>
       
         </Card>
+
+        <Modal isOpen={this.state.modalIsOpen} contentLabel="Edit" ariaHideApp={false} onRequestClose={this.closeModalHandler}>
+        </Modal>
+
         </div>
         )
     }
