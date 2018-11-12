@@ -1,7 +1,8 @@
 /*CSS file for header component*/
 
 /*app-header class contains the style properties of <header> tag in Header.js*/
-.app-header {                       
+.app-header {   
+    overflow: hidden;                    
     background-color: #263238;
     height: 36px;
     padding: 8px 32px 8px 16px;
@@ -12,16 +13,15 @@
     font-family: Arial, Helvetica, sans-serif;
     font-size: 20px;
     color:  #fff;
-    margin: auto;
     text-decoration: none;
     text-align: left;  
     padding: 8px 0px;
+    width:'30%';
 }
 
-
-.search-box {
-    border-radius: 4px;
-    width: 300 px;
-    background-color: "#c0c0c0" ;
-    text-align: center ;
+hr{
+    display: block;
+    border-style: inset;
+    position:'relative'
 }
+
