@@ -10,8 +10,25 @@ import CardContent from '@material-ui/core/CardContent';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 
+import FormControl from '@material-ui/core/FormControl';
+import InputLabel from '@material-ui/core/InputLabel';
+import Input from '@material-ui/core/Input';
+import FormHelperText from '@material-ui/core/FormHelperText';
+
 import Button from '@material-ui/core/Button';
 import Modal from 'react-modal';
+
+// Added Styles for Edit Modal.
+const customStyles = {
+    content: {
+         top: '50%',
+         left: '50%',
+         right: 'auto',
+         bottom: 'auto',
+         marginRight: '-50%',
+         transform: 'translate(-50%, -50%)'
+    }
+};
 
 const styles = theme => ({
     card: {
@@ -83,8 +100,8 @@ class Profile extends Component {
      /*
         Function to open modal.
     */
-   openModalHandler = () => {
-    this.setState({ modalIsOpen : true } ) 
+    openModalHandler = () => {
+        this.setState({ modalIsOpen : true } ) 
     }
 
     closeModalHandler = () => {
@@ -131,7 +148,18 @@ class Profile extends Component {
       
         </Card>
 
-        <Modal isOpen={this.state.modalIsOpen} contentLabel="Edit" ariaHideApp={false} onRequestClose={this.closeModalHandler}>
+        <Modal style={customStyles} isOpen={this.state.modalIsOpen} contentLabel="Edit" ariaHideApp={false} onRequestClose={this.closeModalHandler}>
+            <Typography variant='h4' align='left' gutterBottom>
+                Edit
+            </Typography>
+            <FormControl required>
+                <InputLabel htmlFor="fullname"> Full Name </InputLabel>
+                <Input type="text" id="fullname" ></Input>        
+            </FormControl>
+            <br /><br />
+            
+            <Button variant="contained" color="primary" onClick={this.editClickHandler}>EDIT</Button>
+                              
         </Modal>
 
         </div>
