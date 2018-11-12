@@ -26,20 +26,14 @@ const styles = theme => ({
     userDiv: {
         display: 'flex',
         alignItems: 'center', 
-        margin: '10px'
-    },
-    likeDiv: {
-        paddingTop: '20px',
         width: '100%',
-        paddingBottom: '20px',
-        display: 'flex',
-        alignItems: 'center'
+        margin: '10px'
     },
     rightDiv: {
         paddingLeft: '10px'
     },
     comments: {
-       width: '80%'
+       width: '86%'
     },
   button: {
     float: 'right',
@@ -102,12 +96,14 @@ class Profile extends Component {
 
     imageClickHandler = (pic, index) => {
         var pics = this.state.uploaded_pics[index];
+        var captionReceived = pics.caption.text;
+        var captionText = captionReceived.substring(0, captionReceived.indexOf("#"));
         this.setState({ 
             clickedPic: pics,
             clicked: true,
             url: pics.images.standard_resolution.url,
             hashtags: pics.tags,
-            caption: pics.caption.text,
+            caption: captionText,
             likes: pics.likes.count
         });
     }
@@ -169,7 +165,7 @@ class Profile extends Component {
                 </GridList>
                  </div>
                  <div>
-              <Modal isOpen={this.state.clicked} ariaHideApp={false}>
+              <Modal isOpen={this.state.clicked} ariaHideApp={false} onRequestClose={this.closeModalHandler}>
                   <div className="flex-containerDiv">
                       <div>
                       <img src={this.state.url} alt="pic"/>
@@ -196,7 +192,6 @@ class Profile extends Component {
                             <div className={classes.userDiv}>
                             <FavoriteIcon fontSize="large"
                             className={this.state.dispColor}
-                            style={{ color: 'red' }} 
                                 onClick={() => this.iconClickHandler(this.state.likes)}>
                             </FavoriteIcon>
                             <Typography className="rightDiv">{this.state.likes} likes</Typography>
