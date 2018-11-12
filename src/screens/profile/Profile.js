@@ -132,6 +132,7 @@ class Profile extends Component {
                             }>           
                     </CardHeader>
          
+                    {/* Displaying User data from state variables */}
                     <div className={classes.details}>
                         <CardContent className={classes.content}>
                             <Typography component="title" variant="title">
@@ -146,6 +147,7 @@ class Profile extends Component {
                             {this.state.full_name}
                         </Typography>
           
+                        {/* Edit Button */}
                         <Button variant="fab" mini color="secondary" aria-label="Edit" className={classes.button} onClick={this.openModalHandler} >
                             <EditIcon />
                         </Button>
