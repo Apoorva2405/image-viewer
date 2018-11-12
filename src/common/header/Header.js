@@ -101,7 +101,7 @@ class Header extends Component {
   };
   
   handleToggle = () => {
-    //this.setState(state => ({ open: !state.open }));
+   // this.setState(state => ({ open: !state.open }));
     // Redirecting to profile page with accessToken Set
     ReactDOM.render(<Profile />, document.getElementById('root'));
   };

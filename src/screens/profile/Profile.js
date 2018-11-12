@@ -3,9 +3,44 @@ import Header from '../../common/header/Header';
 import CardHeader from '@material-ui/core/CardHeader';
 import Card from '@material-ui/core/Card';
 import Avatar from '@material-ui/core/Avatar';
+import EditIcon from '@material-ui/icons/Edit';
+import { withStyles } from '@material-ui/core/styles';
 
+import CardContent from '@material-ui/core/CardContent';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+
+import Button from '@material-ui/core/Button';
+
+const styles = theme => ({
+    card: {
+      display: 'flex',
+    },
+    details: {
+      display: 'flex',
+      flexDirection: 'column',
+    },
+    content: {
+      flex: '1 0 auto',
+    },
+    cover: {
+      width: 151,
+    },
+    controls: {
+      display: 'flex',
+      alignItems: 'center',
+      paddingLeft: theme.spacing.unit,
+      paddingBottom: theme.spacing.unit,
+    },
+    playIcon: {
+      height: 38,
+      width: 38,
+    },
+  });
 
 class Profile extends Component {
+   
+
     constructor() {
         super();
         this.state = {
@@ -45,25 +80,50 @@ class Profile extends Component {
         xhr.send(data);       
     }
 
-    render() {
-        return (
-            <div className="profile">
-                <Header  showProfileLogo="true" />
-                <div> PROFILE PAGE </div>
-                <Card>
-                            <CardHeader
-                            avatar={
-                                <Avatar src={this.state.profile_pic} alt="profile"/>
-                            }
-                            title={this.state.username}
-                            subheader={this.state.media}
-                            />
-                </Card>
 
+    render() {
+        const { classes } = this.props;
+        const { theme } = this.props;
+        return (
+           
+       
+       <div>
+
+        <Header showSearchLogo="true" />
+         
+         
+        <Card className={classes.card} >
+        <CardHeader  avatar={
+                                <Avatar src={this.state.profile_pic} alt="profile"/>
+                            }>           
+        </CardHeader>
+         
+        <div className={classes.details}>
+        <CardContent className={classes.content}>
+          <Typography component="title" variant="title">
+                 {this.state.username}
+          </Typography>
+          <Typography variant="subtitle2" color="textSecondary">
+                <span>Posts: </span> <span> {this.state.media} &nbsp; &nbsp; &nbsp; &nbsp;</span> 
+                <span>Follows: </span> <span> {this.state.follows} &nbsp; &nbsp; &nbsp; &nbsp;</span> 
+                <span>Followed By: </span> <span> {this.state.followed_by} </span> 
+          </Typography>
+          <Typography variant="subtitle1" color="textSecondary">
+                {this.state.full_name}
+          </Typography>
+          
+          <Button variant="fab" mini color="secondary" aria-label="Edit" className={classes.button}>
+          <EditIcon />
+          </Button>
+        </CardContent>
     
-               
-            </div>
+        </div>
+      
+        </Card>
+        </div>
         )
     }
 }
-export default Profile;
+
+
+export default withStyles(styles, { withTheme: true }) (Profile);
