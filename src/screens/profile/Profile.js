@@ -5,16 +5,11 @@ import Card from '@material-ui/core/Card';
 import Avatar from '@material-ui/core/Avatar';
 import EditIcon from '@material-ui/icons/Edit';
 import { withStyles } from '@material-ui/core/styles';
-
 import CardContent from '@material-ui/core/CardContent';
-import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
-import FormHelperText from '@material-ui/core/FormHelperText';
-
 import Button from '@material-ui/core/Button';
 import Modal from 'react-modal';
 
@@ -30,6 +25,7 @@ const customStyles = {
     }
 };
 
+// Added styles for userdata display.
 const styles = theme => ({
     card: {
       display: 'flex',
@@ -59,6 +55,7 @@ const styles = theme => ({
 class Profile extends Component {
     constructor() {
         super();
+        // Intialized State Variables.
         this.state = {
             username:"",
             profile_pic:"",
@@ -66,6 +63,7 @@ class Profile extends Component {
             follows:"",
             followed_by:"",
             full_name:"",
+            full_name_t:"",
             modalIsOpen : false
         }
     }
@@ -97,75 +95,88 @@ class Profile extends Component {
         xhr.send(data);       
     }
 
-     /*
-        Function to open modal.
-    */
+    
+    // Function to open modal.
     openModalHandler = () => {
         this.setState({ modalIsOpen : true } ) 
     }
 
+    // Function to close Modal
     closeModalHandler = () => {
         this.setState({ modalIsOpen : false }) 
     }
 
+    // Updating Full Name
+    editClickHandler = (e) =>  {
+        // If temporary full name is not null.
+        if(  this.state.full_name_t !== "")
+        {
+            this.setState({ full_name: this.state.full_name_t });
+        }
+        
+        // Closing modal class
+        this.setState({ modalIsOpen : false }) ;        
+    }
+
+    // Setting full name temporary value to what is typed in full name inputbox.
+    inputFullNameChangeHandler = (e) => {
+        this.setState({ full_name_t: e.target.value });
+    } 
+ 
     render() {
         const { classes } = this.props;
         const { theme } = this.props;
         return (
-           
-       
-       <div>
+            <div>
+                 {/* Header for profile Page */}
+                <Header showProfileLogo="true" />
 
-        <Header showSearchLogo="true" />
-         
-         
-        <Card className={classes.card} >
-        <CardHeader  avatar={
+                {/* Code to display userprofile details */}
+                <Card className={classes.card} >
+                    <CardHeader  avatar={
                                 <Avatar src={this.state.profile_pic} alt="profile"/>
                             }>           
-        </CardHeader>
+                    </CardHeader>
          
-        <div className={classes.details}>
-        <CardContent className={classes.content}>
-          <Typography component="title" variant="title">
-                 {this.state.username}
-          </Typography>
-          <Typography variant="subtitle2" color="textSecondary">
-                <span>Posts: </span> <span> {this.state.media} &nbsp; &nbsp; &nbsp; &nbsp;</span> 
-                <span>Follows: </span> <span> {this.state.follows} &nbsp; &nbsp; &nbsp; &nbsp;</span> 
-                <span>Followed By: </span> <span> {this.state.followed_by} </span> 
-          </Typography>
-          <Typography variant="subtitle1" color="textSecondary">
-                {this.state.full_name}
-          </Typography>
+                    <div className={classes.details}>
+                        <CardContent className={classes.content}>
+                            <Typography component="title" variant="title">
+                                {this.state.username}
+                            </Typography>
+                        <Typography variant="subtitle2" color="textSecondary">
+                            <span>Posts: </span> <span> {this.state.media} &nbsp; &nbsp; &nbsp; &nbsp;</span> 
+                            <span>Follows: </span> <span> {this.state.follows} &nbsp; &nbsp; &nbsp; &nbsp;</span> 
+                            <span>Followed By: </span> <span> {this.state.followed_by} </span> 
+                        </Typography>
+                        <Typography variant="subtitle1" color="textSecondary">
+                            {this.state.full_name}
+                        </Typography>
           
-          <Button variant="fab" mini color="secondary" aria-label="Edit" className={classes.button} onClick={this.openModalHandler} >
-          <EditIcon />
-          </Button>
-        </CardContent>
-    
-        </div>
-      
-        </Card>
+                        <Button variant="fab" mini color="secondary" aria-label="Edit" className={classes.button} onClick={this.openModalHandler} >
+                            <EditIcon />
+                        </Button>
+                        </CardContent>
+                    </div>
+                </Card>
 
+         {/* Edit Modal Class */}
         <Modal style={customStyles} isOpen={this.state.modalIsOpen} contentLabel="Edit" ariaHideApp={false} onRequestClose={this.closeModalHandler}>
             <Typography variant='h4' align='left' gutterBottom>
                 Edit
             </Typography>
+            {/* Edit Form Control */}
             <FormControl required>
                 <InputLabel htmlFor="fullname"> Full Name </InputLabel>
-                <Input type="text" id="fullname" ></Input>        
+                <Input type="text" id="fullname"  full_name={this.state.full_name_t}
+                                onChange={this.inputFullNameChangeHandler}></Input>        
             </FormControl>
             <br /><br />
-            
-            <Button variant="contained" color="primary" onClick={this.editClickHandler}>EDIT</Button>
-                              
+            <Button variant="contained" color="primary" onClick={this.editClickHandler}>UPDATE</Button>                             
         </Modal>
 
         </div>
         )
     }
 }
-
 
 export default withStyles(styles, { withTheme: true }) (Profile);
