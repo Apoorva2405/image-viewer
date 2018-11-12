@@ -1,80 +1,193 @@
 import React, { Component } from 'react';
 import Header from '../../common/header/Header';
-import { withStyles } from '@material-ui/core/styles';
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
-import Modal from 'react-modal';
-import Avatar from '@material-ui/core/Avatar';
-import Divider from '@material-ui/core/Divider';
-import Typography from '@material-ui/core/Typography';
-import FavoriteIcon from '@material-ui/icons/FavoriteBorder';
+import CardHeader from '@material-ui/core/CardHeader';
 import Card from '@material-ui/core/Card';
-import './Profile.css';
+import Avatar from '@material-ui/core/Avatar';
+import EditIcon from '@material-ui/icons/Edit';
+import { withStyles } from '@material-ui/core/styles';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
+import Modal from 'react-modal';
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
+import FavoriteIcon from '@material-ui/icons/FavoriteBorder';
+import Divider from '@material-ui/core/Divider';
 
+// Added Styles for Edit Modal.
+const customStyles = {
+    content: {
+         top: '50%',
+         left: '50%',
+         right: 'auto',
+         bottom: 'auto',
+         marginRight: '-50%',
+         transform: 'translate(-50%, -50%)'
+    }
+};
+
+// Added styles for userdata display.
 const styles = theme => ({
-  root: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    overflow: 'hidden',
-    backgroundColor: theme.palette.background.paper,
-  },
-    userDiv: {
+    root: {
         display: 'flex',
-        alignItems: 'center', 
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        overflow: 'hidden',
+        backgroundColor: theme.palette.background.paper,
+    },
+    flexcontainerDiv: {
+        display: 'flex',
+        justifyContent: 'center',
+        borderWidth: '20px',
+        borderColor: 'black'
+    },
+        userDiv: {
+            display: 'flex',
+            alignItems: 'center', 
+            margin: '10px'
+        },
+        rightDiv: {
+            marginLeft: '12px'
+        },
+        comments: {
+        width: '80%'
+        },
+    button: {
+        float: 'right',
+        width: '10%'
+    },
+    bottom: {
+        marginTop:'270px'
+    },
+    subheader: {
         width: '100%',
-        margin: '10px'
     },
-    rightDiv: {
-        paddingLeft: '10px'
+    card: {
+      display: 'flex',
     },
-    comments: {
-       width: '86%'
+    details: {
+      display: 'flex',
+      flexDirection: 'column',
     },
-  button: {
-    float: 'right',
-    width: '10%'
-   },
-  bottom: {
-      marginTop:'270px'
-  },
-  subheader: {
-    width: '100%',
-  },
-});
+    content: {
+      flex: '1 0 auto',
+    },
+    cover: {
+      width: 151,
+    },
+    
+    playIcon: {
+      height: 38,
+      width: 38,
+    },
+  });
 
 class Profile extends Component {
     constructor() {
         super();
+        // Intialized State Variables.
         this.state = {
-            accessToken: {},
             username:"",
             profile_pic:"",
+            media:"",
+            follows:"",
+            followed_by:"",
+            full_name:"",
+            full_name_t:"",
+            modalIsOpen : false,
             uploaded_pics:[],
             hashtags:[],
             comments: [],
             likes:"",
-            date:"",
             caption:"",
             url:"",
             active: false,
             dispColor: "transparent",
-            likesCount: "",
             clicked: false,
-            pic:""
         }
     }
 
+    componentDidMount() {
+        console.log(sessionStorage.getItem("access-token")) ;   
+    }
+
+    componentWillMount() {
+        // get user data
+        let data = null;
+        let xhr = new XMLHttpRequest();
+        let that = this;
+        xhr.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                console.log("response "+xhr.responseText);
+                that.setState({
+                    profile_pic: JSON.parse(this.responseText).data.profile_picture,
+                    username: JSON.parse(this.responseText).data.username,
+                    full_name: JSON.parse(this.responseText).data.full_name,
+                    media:  JSON.parse(this.responseText).data.counts.media,
+                    follows : JSON.parse(this.responseText).data.counts.follows,
+                    followed_by : JSON.parse(this.responseText).data.counts.followed_by
+                });
+             }
+        });
+        
+        xhr.open("GET",  "https://api.instagram.com/v1/users/self/?access_token=" + sessionStorage.getItem("access-token"));
+        xhr.send(data);    
+
+        // get pictures
+        let xhrPic = new XMLHttpRequest();
+        xhrPic.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                that.setState({
+                    uploaded_pics: JSON.parse(this.responseText).data,
+                    likes: JSON.parse(this.responseText).data.likes,
+                    url: JSON.parse(this.responseText).data[0].images.standard_resolution.url
+                });
+            }
+        });
+
+        xhrPic.open("GET", "https://api.instagram.com/v1/users/self/media/recent/?access_token=" + sessionStorage.getItem("access-token"));
+        xhrPic.send(data);   
+    }
+
+    
+    // Function to open modal.
+    openModalHandler = () => {
+        this.setState({ modalIsOpen : true } ) 
+    }
+
+    // Function to close Modal
+    closeModalHandler = () => {
+        this.setState({ 
+            modalIsOpen : false,
+            clicked: false
+         }) 
+    }
+
+    // Updating Full Name
+    editClickHandler = (e) =>  {
+        // If temporary full name is not null.
+        if(  this.state.full_name_t !== "")
+        {
+            this.setState({ full_name: this.state.full_name_t });
+        }
+        
+        // Closing modal class
+        this.setState({ modalIsOpen : false }) ;        
+    }
+
+    // Setting full name temporary value to what is typed in full name inputbox.
+    inputFullNameChangeHandler = (e) => {
+        this.setState({ full_name_t: e.target.value });
+    }
+
+    // Function for like handler
     iconClickHandler = (count) => {
         const currentState = this.state.active;
         this.setState({ active: !currentState });
-        var update_pics = this.state.uploaded_pics;
         if (this.state.active === false) {
-           // update_pics[id].likes.count += 1;
             count = count + 1;
             this.setState({ 
                 dispColor: "red",
@@ -90,10 +203,6 @@ class Profile extends Component {
         }
 }
 
-    closeModalHandler = () => {
-        this.setState({ clicked: false });
-    }
-
     imageClickHandler = (pic, index) => {
         var pics = this.state.uploaded_pics[index];
         var captionReceived = pics.caption.text;
@@ -107,53 +216,60 @@ class Profile extends Component {
             likes: pics.likes.count
         });
     }
-
-    componentDidMount() {
-      //  let currentState = this.state;
-        console.log(sessionStorage.getItem("access-token")) ;
-      //  sessionStorage.setItem("access-token", this.props.accessToken);
-    }
-
-    componentWillMount() {
-        // get user data
-        let data = null;
-        let xhr = new XMLHttpRequest();
-        let that = this;
-        xhr.addEventListener("readystatechange", function () {
-            if (this.readyState === 4) {
-                that.setState({
-                    profile_pic: JSON.parse(this.responseText).data.profile_picture,
-                    username: JSON.parse(this.responseText).data.username
-                });
-             }
-        });
-
-        xhr.open("GET", "https://api.instagram.com/v1/users/self/?access_token=8661035776.d0fcd39.87fd934e04f84253aaf234d8bd4e4c65");
-        xhr.send(data);
-
-        // get pictures
-        let xhrPic = new XMLHttpRequest();
-        xhrPic.addEventListener("readystatechange", function () {
-            if (this.readyState === 4) {
-                var dateReceived = JSON.parse(this.responseText).data[0].created_time;
-                that.setState({
-                    date: new Date(Number(dateReceived)).toISOString(),
-                    uploaded_pics: JSON.parse(this.responseText).data,
-                    likes: JSON.parse(this.responseText).data.likes,
-                    url: JSON.parse(this.responseText).data[0].images.standard_resolution.url
-                });
-            }
-        });
-
-        xhrPic.open("GET", "https://api.instagram.com/v1/users/self/media/recent/?access_token=8661035776.d0fcd39.87fd934e04f84253aaf234d8bd4e4c65");
-        xhrPic.send(data);
-    }
-
+ 
     render() {
-    const { classes } = this.props;
+        const { classes } = this.props;
         return (
-            <div className="profile">
+            <div>
+                 {/* Header for profile Page */}
                 <Header showProfileLogo="true" />
+
+                {/* Code to display userprofile details */}
+                <Card className={classes.card} >
+                    <CardHeader  avatar={
+                                <Avatar src={this.state.profile_pic} alt="profile"/>
+                            }>           
+                    </CardHeader>
+         
+                    {/* Displaying User data from state variables */}
+                    <div className={classes.details}>
+                        <CardContent className={classes.content}>
+                            <Typography component="title" variant="title">
+                                {this.state.username}
+                            </Typography>
+                        <Typography variant="subtitle2" color="textSecondary">
+                            <span>Posts: </span> <span> {this.state.media} &nbsp; &nbsp; &nbsp; &nbsp;</span> 
+                            <span>Follows: </span> <span> {this.state.follows} &nbsp; &nbsp; &nbsp; &nbsp;</span> 
+                            <span>Followed By: </span> <span> {this.state.followed_by} </span> 
+                        </Typography>
+                        <Typography variant="subtitle1" color="textSecondary">
+                            {this.state.full_name}
+                        </Typography>
+          
+                        {/* Edit Button */}
+                        <Button variant="fab" mini color="secondary" aria-label="Edit" className={classes.button} onClick={this.openModalHandler} >
+                            <EditIcon />
+                        </Button>
+                        </CardContent>
+                    </div>
+                </Card>
+
+         {/* Edit Modal Class */}
+        <Modal style={customStyles} isOpen={this.state.modalIsOpen} contentLabel="Edit" ariaHideApp={false} onRequestClose={this.closeModalHandler}>
+            <Typography variant='h4' align='left' gutterBottom>
+                Edit
+            </Typography>
+            {/* Edit Form Control */}
+            <FormControl required>
+                <InputLabel htmlFor="fullname"> Full Name </InputLabel>
+                <Input type="text" id="fullname"  full_name={this.state.full_name_t}
+                                onChange={this.inputFullNameChangeHandler}></Input>        
+            </FormControl>
+            <br /><br />
+            <Button variant="contained" color="primary" onClick={this.editClickHandler}>UPDATE</Button>                             
+        </Modal>
+
+        {/**Main Profile Page */}
                 <div> 
                 <GridList cellHeight="100%" className={classes.gridList} cols={3}>
                     {this.state.uploaded_pics.map((pic,index) => (
@@ -166,12 +282,12 @@ class Profile extends Component {
                  </div>
                  <div>
               <Modal isOpen={this.state.clicked} ariaHideApp={false} onRequestClose={this.closeModalHandler}>
-                  <div className="flex-containerDiv">
+                  <div className={classes.flexcontainerDiv}>
                       <div>
                       <img src={this.state.url} alt="pic"/>
                       </div>
 
-                      <div>
+                      <div className={classes.rightDiv}>
                       <div className={classes.userDiv}>
                       <Avatar src={this.state.profile_pic}/>
                       <Typography style={{marginLeft: '10px'}}>{this.state.username}</Typography>
@@ -210,8 +326,9 @@ class Profile extends Component {
                     </div>
             </Modal>
                 </div>
-            </div>
+        </div>
         )
     }
 }
-export default withStyles(styles)(Profile);
+
+export default withStyles(styles) (Profile);
