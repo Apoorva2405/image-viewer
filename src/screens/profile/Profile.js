@@ -26,7 +26,7 @@ const customStyles = {
 };
 
 // Added styles for userdata display.
-const styles = theme => ({
+const styles = () => ({
     card: {
       display: 'flex',
     },
@@ -40,12 +40,7 @@ const styles = theme => ({
     cover: {
       width: 151,
     },
-    controls: {
-      display: 'flex',
-      alignItems: 'center',
-      paddingLeft: theme.spacing.unit,
-      paddingBottom: theme.spacing.unit,
-    },
+    
     playIcon: {
       height: 38,
       width: 38,
@@ -125,7 +120,6 @@ class Profile extends Component {
  
     render() {
         const { classes } = this.props;
-        const { theme } = this.props;
         return (
             <div>
                  {/* Header for profile Page */}
@@ -179,4 +173,4 @@ class Profile extends Component {
     }
 }
 
-export default withStyles(styles, { withTheme: true }) (Profile);
+export default withStyles(styles) (Profile);
