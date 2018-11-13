@@ -44,23 +44,46 @@ const styles = theme => ({
         marginLeft: '25px',
         marginRight: '25px'
     },
+  avatar: {
+    width: '120px',
+    height: '120px',
+  },
     flexcontainerDiv: {
         display: 'flex',
         justifyContent: 'center',
         borderWidth: '20px',
         borderColor: 'black'
     },
+headerDiv: {
+            display: 'flex',
+            alignItems: 'center', 
+            margin: '20px',
+            marginLeft: '250px'
+},
         userDiv: {
             display: 'flex',
             alignItems: 'center', 
             margin: '10px'
+        },
+        typeDiv: {
+            display: 'flex',
+            alignItems: 'center', 
+            justifyContent: 'space-between'
+        },
+        profileDiv: {
+            display: 'flex',
+            alignItems: 'center',
+            marginTop: '10px'
         },
         rightDiv: {
             marginLeft: '12px'
         },
         comments: {
         width: '80%'
-        },
+    },
+    editbutton: {
+     marginLeft: '10px'
+    },
     button: {
         float: 'right',
         width: '10%'
@@ -75,6 +98,7 @@ const styles = theme => ({
       display: 'flex',
     },
     details: {
+      marginLeft: '30px',
       display: 'flex',
       flexDirection: 'column',
     },
@@ -236,34 +260,33 @@ class Profile extends Component {
                 <Header showProfileLogo="true" />
 
                 {/* Code to display userprofile details */}
-                <Card className={classes.card} >
-                    <CardHeader  avatar={
-                                <Avatar src={this.state.profile_pic} alt="profile"/>
-                            }>           
-                    </CardHeader>
+                    <div className={classes.headerDiv}>
+                    <div>
+                    <Avatar className={classes.avatar} src={this.state.profile_pic} alt="profile"/>   
+                    </div>        
          
                     {/* Displaying User data from state variables */}
                     <div className={classes.details}>
-                        <CardContent className={classes.content}>
-                            <Typography component="title" variant="title">
+                            <Typography style={{marginBottom: '8px',fontSize:'30px'}} component="title" variant="title">
                                 {this.state.username}
                             </Typography>
-                        <Typography variant="subtitle2" color="textSecondary">
-                            <span>Posts: </span> <span> {this.state.media} &nbsp; &nbsp; &nbsp; &nbsp;</span> 
-                            <span>Follows: </span> <span> {this.state.follows} &nbsp; &nbsp; &nbsp; &nbsp;</span> 
-                            <span>Followed By: </span> <span> {this.state.followed_by} </span> 
+                        <Typography variant="subtitle2" color="textPrimary">
+                            <span style={{marginRight: '120px', fontSize:'20px'}}>Posts: {this.state.media}</span> 
+                            <span  style={{marginRight: '120px' , fontSize:'20px'}}>Follows: {this.state.follows}</span> 
+                            <span style={{fontSize:'20px'}}>Followed By: {this.state.followed_by} </span> 
                         </Typography>
-                        <Typography variant="subtitle1" color="textSecondary">
+                        <div className={classes.profileDiv}>
+                        <Typography style={{fontSize:'25px'}} variant="subtitle1" color="textPrimary">
                             {this.state.full_name}
                         </Typography>
           
                         {/* Edit Button */}
-                        <Button variant="fab" mini color="secondary" aria-label="Edit" className={classes.button} onClick={this.openModalHandler} >
+                        <Button variant="fab" mini color="secondary" aria-label="Edit" className={classes.editbutton} onClick={this.openModalHandler} >
                             <EditIcon />
                         </Button>
-                        </CardContent>
+                        </div>
                     </div>
-                </Card>
+                    </div>
 
          {/* Edit Modal Class */}
         <Modal style={customStyles} isOpen={this.state.modalIsOpen} contentLabel="Edit" ariaHideApp={false} onRequestClose={this.closeModalHandler}>
@@ -311,16 +334,12 @@ class Profile extends Component {
                         <div className="tags">
                         {this.state.hashtags.map(tag => (
                             <Typography style={{color: '#29B6F6'}}>
-                                #{tag}
+                                #{tag} &nbsp;
                             </Typography>
                         ))}
                         </div>
                       <div className={classes.bottom}>
                             <div className={classes.userDiv}>
-                            {/*<FavoriteIcon fontSize="large"
-                            className={this.state.dispColor}
-                                onClick={() => this.iconClickHandler(this.state.likes)}>
-                            </FavoriteIcon>*/}
                             <Icon style={{fontSize:"35px"}} onClick={() => this.iconClickHandler(this.state.likes)}>
                              {(this.state.active)?<Favorite className="red" fontSize="large"/>:<FavoriteIcon fontSize="large"/>}
                             </Icon>
