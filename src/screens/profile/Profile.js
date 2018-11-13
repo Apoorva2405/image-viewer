@@ -38,6 +38,10 @@ const styles = theme => ({
         overflow: 'hidden',
         backgroundColor: theme.palette.background.paper,
     },
+    mainDiv: {
+        marginLeft: '25px',
+        marginRight: '25px'
+    },
     flexcontainerDiv: {
         display: 'flex',
         justifyContent: 'center',
@@ -121,7 +125,7 @@ class Profile extends Component {
         let that = this;
         xhr.addEventListener("readystatechange", function () {
             if (this.readyState === 4) {
-                console.log("response "+xhr.responseText);
+                // set state variables
                 that.setState({
                     profile_pic: JSON.parse(this.responseText).data.profile_picture,
                     username: JSON.parse(this.responseText).data.username,
@@ -188,6 +192,7 @@ class Profile extends Component {
         const currentState = this.state.active;
         this.setState({ active: !currentState });
         if (this.state.active === false) {
+            // increment count
             count = count + 1;
             this.setState({ 
                 dispColor: "red",
@@ -195,6 +200,7 @@ class Profile extends Component {
             })
         } 
         else {
+            // decrement count
             count = count -1;
             this.setState({ 
                 dispColor: "transparent",
@@ -203,6 +209,9 @@ class Profile extends Component {
         }
 }
 
+/**
+ * Function for handling image list click
+ */
     imageClickHandler = (pic, index) => {
         var pics = this.state.uploaded_pics[index];
         var captionReceived = pics.caption.text;
@@ -270,7 +279,7 @@ class Profile extends Component {
         </Modal>
 
         {/**Main Profile Page */}
-                <div> 
+                <div className={classes.mainDiv}> 
                 <GridList cellHeight="100%" className={classes.gridList} cols={3}>
                     {this.state.uploaded_pics.map((pic,index) => (
                     <GridListTile key={pic.id}>
