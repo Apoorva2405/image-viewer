@@ -12,6 +12,12 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
 import Modal from 'react-modal';
+import GridList from '@material-ui/core/GridList';
+import GridListTile from '@material-ui/core/GridListTile';
+import FavoriteIcon from '@material-ui/icons/FavoriteBorder';
+import Divider from '@material-ui/core/Divider';
+import Icon from "@material-ui/core/Icon";
+import Favorite from '@material-ui/icons/Favorite';
 
 // Added Styles for Edit Modal.
 const customStyles = {
@@ -26,7 +32,45 @@ const customStyles = {
 };
 
 // Added styles for userdata display.
-const styles = () => ({
+const styles = theme => ({
+    root: {
+        display: 'flex',
+        flexWrap: 'wrap',
+        justifyContent: 'center',
+        overflow: 'hidden',
+        backgroundColor: theme.palette.background.paper,
+    },
+    mainDiv: {
+        marginLeft: '25px',
+        marginRight: '25px'
+    },
+    flexcontainerDiv: {
+        display: 'flex',
+        justifyContent: 'center',
+        borderWidth: '20px',
+        borderColor: 'black'
+    },
+        userDiv: {
+            display: 'flex',
+            alignItems: 'center', 
+            margin: '10px'
+        },
+        rightDiv: {
+            marginLeft: '12px'
+        },
+        comments: {
+        width: '80%'
+        },
+    button: {
+        float: 'right',
+        width: '10%'
+    },
+    bottom: {
+        marginTop:'270px'
+    },
+    subheader: {
+        width: '100%',
+    },
     card: {
       display: 'flex',
     },
@@ -59,7 +103,16 @@ class Profile extends Component {
             followed_by:"",
             full_name:"",
             full_name_t:"",
-            modalIsOpen : false
+            modalIsOpen : false,
+            uploaded_pics:[],
+            hashtags:[],
+            comments: [],
+            likes:"",
+            caption:"",
+            url:"",
+            active: false,
+            dispColor: "transparent",
+            clicked: false,
         }
     }
 
@@ -74,7 +127,7 @@ class Profile extends Component {
         let that = this;
         xhr.addEventListener("readystatechange", function () {
             if (this.readyState === 4) {
-                console.log("response "+xhr.responseText);
+                // set state variables
                 that.setState({
                     profile_pic: JSON.parse(this.responseText).data.profile_picture,
                     username: JSON.parse(this.responseText).data.username,
@@ -87,7 +140,22 @@ class Profile extends Component {
         });
         
         xhr.open("GET",  "https://api.instagram.com/v1/users/self/?access_token=" + sessionStorage.getItem("access-token"));
-        xhr.send(data);       
+        xhr.send(data);    
+
+        // get pictures
+        let xhrPic = new XMLHttpRequest();
+        xhrPic.addEventListener("readystatechange", function () {
+            if (this.readyState === 4) {
+                that.setState({
+                    uploaded_pics: JSON.parse(this.responseText).data,
+                    likes: JSON.parse(this.responseText).data.likes,
+                    url: JSON.parse(this.responseText).data[0].images.standard_resolution.url
+                });
+            }
+        });
+
+        xhrPic.open("GET", "https://api.instagram.com/v1/users/self/media/recent/?access_token=" + sessionStorage.getItem("access-token"));
+        xhrPic.send(data);   
     }
 
     
@@ -98,7 +166,10 @@ class Profile extends Component {
 
     // Function to close Modal
     closeModalHandler = () => {
-        this.setState({ modalIsOpen : false }) 
+        this.setState({ 
+            modalIsOpen : false,
+            clicked: false
+         }) 
     }
 
     // Updating Full Name
@@ -116,7 +187,46 @@ class Profile extends Component {
     // Setting full name temporary value to what is typed in full name inputbox.
     inputFullNameChangeHandler = (e) => {
         this.setState({ full_name_t: e.target.value });
-    } 
+    }
+
+    // Function for like handler
+    iconClickHandler = (count) => {
+        const currentState = this.state.active;
+        this.setState({ active: !currentState });
+        if (this.state.active === false) {
+            // increment count
+            count = count + 1;
+            this.setState({ 
+                dispColor: "red",
+                likes: count
+            })
+        } 
+        else {
+            // decrement count
+            count = count -1;
+            this.setState({ 
+                dispColor: "transparent",
+                likes: count
+            })
+        }
+}
+
+/**
+ * Function for handling image list click
+ */
+    imageClickHandler = (pic, index) => {
+        var pics = this.state.uploaded_pics[index];
+        var captionReceived = pics.caption.text;
+        var captionText = captionReceived.substring(0, captionReceived.indexOf("#"));
+        this.setState({ 
+            clickedPic: pics,
+            clicked: true,
+            url: pics.images.standard_resolution.url,
+            hashtags: pics.tags,
+            caption: captionText,
+            likes: pics.likes.count
+        });
+    }
  
     render() {
         const { classes } = this.props;
@@ -170,6 +280,66 @@ class Profile extends Component {
             <Button variant="contained" color="primary" onClick={this.editClickHandler}>UPDATE</Button>                             
         </Modal>
 
+        {/**Main Profile Page */}
+                <div className={classes.mainDiv}> 
+                <GridList cellHeight="100%" className={classes.gridList} cols={3}>
+                    {this.state.uploaded_pics.map((pic,index) => (
+                    <GridListTile key={pic.id}>
+                        <img src={pic.images.standard_resolution.url} alt="pic" 
+                        onClick={() => this.imageClickHandler(pic,index)}/>
+                    </GridListTile>
+                    ))}
+                </GridList>
+                 </div>
+                 <div>
+              <Modal isOpen={this.state.clicked} ariaHideApp={false} onRequestClose={this.closeModalHandler}>
+                  <div className={classes.flexcontainerDiv}>
+                      <div>
+                      <img src={this.state.url} alt="pic"/>
+                      </div>
+
+                      <div className={classes.rightDiv}>
+                      <div className={classes.userDiv}>
+                      <Avatar src={this.state.profile_pic}/>
+                      <Typography style={{marginLeft: '10px'}}>{this.state.username}</Typography>
+                      </div>
+
+                      <Divider />
+                      <Typography variant="subtitle1">
+                            {this.state.caption}
+                      </Typography>
+                        <div className="tags">
+                        {this.state.hashtags.map(tag => (
+                            <Typography style={{color: '#29B6F6'}}>
+                                #{tag}
+                            </Typography>
+                        ))}
+                        </div>
+                      <div className={classes.bottom}>
+                            <div className={classes.userDiv}>
+                            {/*<FavoriteIcon fontSize="large"
+                            className={this.state.dispColor}
+                                onClick={() => this.iconClickHandler(this.state.likes)}>
+                            </FavoriteIcon>*/}
+                            <Icon style={{fontSize:"35px"}} onClick={() => this.iconClickHandler(this.state.likes)}>
+                             {(this.state.active)?<Favorite className="red" fontSize="large"/>:<FavoriteIcon fontSize="large"/>}
+                            </Icon>
+                            <Typography className={classes.rightDiv}>{this.state.likes} likes</Typography>
+                            </div>
+                            <div className={classes.userDiv}>
+                                <FormControl className={classes.comments}>
+                                        <InputLabel htmlFor="comment">Add a comment</InputLabel>
+                                        <Input id="comment" type="text"
+                                            comment={this.state.comment}
+                                            onChange={this.inputCommentChangeHandler} />
+                                    </FormControl> 
+                                    <Button className={classes.button} variant="contained" color="primary" onClick={this.commentClickHandler}>Add</Button> 
+                            </div>
+                      </div>
+                      </div>
+                    </div>
+            </Modal>
+                </div>
         </div>
         )
     }
