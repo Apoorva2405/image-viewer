@@ -124,7 +124,7 @@ class Header extends Component {
     });
     console.log("cleared session storage");
 
-    // Redirecting to home page with accessToken Set
+    // Redirecting to Login page
     ReactDOM.render(<Login />, document.getElementById('root'));
 
   }
