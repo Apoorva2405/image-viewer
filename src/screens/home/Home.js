@@ -90,7 +90,7 @@ class Home extends Component {
              }
         });
 
-        xhr.open("GET", "https://api.instagram.com/v1/users/self/?access_token=8800839957.a7c5df0.f9d82aafa9b14b79995ee88edf671444");
+        xhr.open("GET", "https://api.instagram.com/v1/users/self/?access_token=" + sessionStorage.getItem("access-token"));
         xhr.send(data);
 
         // get pictures
@@ -108,7 +108,7 @@ class Home extends Component {
             }
         });
 
-        xhrPic.open("GET", "https://api.instagram.com/v1/users/self/media/recent/?access_token=8800839957.a7c5df0.f9d82aafa9b14b79995ee88edf671444");
+        xhrPic.open("GET", "https://api.instagram.com/v1/users/self/media/recent/?access_token=" + sessionStorage.getItem("access-token"));
         xhrPic.send(data);
     }
 
