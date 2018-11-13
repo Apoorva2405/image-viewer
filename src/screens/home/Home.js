@@ -148,7 +148,7 @@ class Home extends Component {
                                 <div className="tags">
                                 {pic.tags.map(tag => (
                                     <Typography style={{color: '#29B6F6'}}>
-                                        #{tag}
+                                        #{tag} &nbsp;
                                     </Typography>
                                 ))}
                                 </div>
