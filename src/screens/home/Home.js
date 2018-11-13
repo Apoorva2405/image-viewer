@@ -9,10 +9,12 @@ import Avatar from '@material-ui/core/Avatar';
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import FavoriteIcon from '@material-ui/icons/FavoriteBorder';
+import Favorite from '@material-ui/icons/Favorite';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
+import Icon from "@material-ui/core/Icon";
 import './Home.css';
 
 class Home extends Component {
@@ -31,26 +33,34 @@ class Home extends Component {
             url:"",
             active: false,
             dispColor: "transparent",
-            likesCount: ""
+            likesCount: "",
+            index:""
         }
+    }
+
+    handleChange = () => {
+        const currentState = this.state.active;
+        this.setState({ active: !currentState });   
     }
 
     iconClickHandler = (count, id) => {
         const currentState = this.state.active;
-        this.setState({ active: !currentState });
+        this.setState({ 
+            active: !currentState
+        });
+
         var update_pics = this.state.uploaded_pics;
         if (this.state.active === false) {
             update_pics[id].likes.count += 1;
             count = count + 1;
             this.setState({ 
-                dispColor: "red",
-                uploaded_pics: update_pics
+                uploaded_pics: update_pics,
+                index: id
             })
         } 
-        else {
+        else if (this.state.active === true && this.state.index==id){
             update_pics[id].likes.count -= 1;
             this.setState({ 
-                dispColor: "transparent",
                 uploaded_pics: update_pics
             })
         }
@@ -82,7 +92,6 @@ class Home extends Component {
         let that = this;
         xhr.addEventListener("readystatechange", function () {
             if (this.readyState === 4) {
-                console.log("response "+xhr.responseText);
                 that.setState({
                     profile_pic: JSON.parse(this.responseText).data.profile_picture,
                     username: JSON.parse(this.responseText).data.username
@@ -115,7 +124,6 @@ class Home extends Component {
 
 
     render() {
-       // const { classes } = this.props;
         return (
             <div className="home">
                 <Header showSearchLogo="true" />
@@ -133,7 +141,7 @@ class Home extends Component {
                             />
                             <CardContent>
                                 <img src={pic.images.standard_resolution.url} alt="pic"/>
-                                <Divider inset component="li" />
+                                <Divider/>
                                 <Typography variant="subtitle1">
                                     {pic.caption.text}
                                 </Typography>
@@ -145,12 +153,14 @@ class Home extends Component {
                                 ))}
                                 </div>
                                 <div className="likes">
-                                <FavoriteIcon fontSize="large"
-                                key={"pic" + pic.id}
+                                <Icon style={{fontSize:"35px"}} onClick={() => this.iconClickHandler(pic.likes.count,index)}>
+                                {(this.state.active && this.state.index==index) ?<Favorite className="red" fontSize="large"/>:<FavoriteIcon fontSize="large"/>}
+                                </Icon>
+                                {/*<FavoriteIcon fontSize="large"
                                 className={this.state.dispColor}
                                  onClick={() => this.iconClickHandler(pic.likes.count,index)}>
-                                </FavoriteIcon>
-                                <Typography key={"pic" + pic.id} className="right">{pic.likes.count} likes</Typography>
+                                </FavoriteIcon>*/}
+                                <Typography className="right">{pic.likes.count} likes</Typography>
                                 </div>
                                 <div>
                                 <Typography>
