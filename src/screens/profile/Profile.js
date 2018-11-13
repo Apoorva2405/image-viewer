@@ -16,6 +16,8 @@ import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import FavoriteIcon from '@material-ui/icons/FavoriteBorder';
 import Divider from '@material-ui/core/Divider';
+import Icon from "@material-ui/core/Icon";
+import Favorite from '@material-ui/icons/Favorite';
 
 // Added Styles for Edit Modal.
 const customStyles = {
@@ -315,11 +317,14 @@ class Profile extends Component {
                         </div>
                       <div className={classes.bottom}>
                             <div className={classes.userDiv}>
-                            <FavoriteIcon fontSize="large"
+                            {/*<FavoriteIcon fontSize="large"
                             className={this.state.dispColor}
                                 onClick={() => this.iconClickHandler(this.state.likes)}>
-                            </FavoriteIcon>
-                            <Typography className="rightDiv">{this.state.likes} likes</Typography>
+                            </FavoriteIcon>*/}
+                            <Icon style={{fontSize:"35px"}} onClick={() => this.iconClickHandler(this.state.likes)}>
+                             {(this.state.active)?<Favorite className="red" fontSize="large"/>:<FavoriteIcon fontSize="large"/>}
+                            </Icon>
+                            <Typography className={classes.rightDiv}>{this.state.likes} likes</Typography>
                             </div>
                             <div className={classes.userDiv}>
                                 <FormControl className={classes.comments}>
