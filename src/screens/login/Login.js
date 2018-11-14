@@ -48,7 +48,7 @@ class Login extends Component {
         // Variables declared for login
         var username = "UpgradUser" ;
         var password = "upgrad@123" ;
-        var accessToken = "8800839957.a7c5df0.f9d82aafa9b14b79995ee88edf671444" ;
+        var accessToken = "8661035776.d0fcd39.87fd934e04f84253aaf234d8bd4e4c65" ;
 
         // If Username & Password are same then redirect it to Home Page
         if( (username === this.state.username) && (password === this.state.loginPassword)  ){
@@ -74,7 +74,8 @@ class Login extends Component {
         const { classes } = this.props;
         return (
             <div>
-                <Header />
+                <Header showLoginHeader="true" />
+                <div>
                 <Card className={classes.card}>
                     <CardContent className={classes.content}>
                         <Typography variant='h4' align='left' gutterBottom>
@@ -105,6 +106,7 @@ class Login extends Component {
                         
                     </CardContent>
                 </Card>
+            </div>
             </div>
         )
     }
