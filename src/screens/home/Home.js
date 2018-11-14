@@ -16,7 +16,6 @@ import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
 import Icon from "@material-ui/core/Icon";
 import './Home.css';
-import FormHelperText from '@material-ui/core/FormHelperText';
 
 
 class Home extends Component {
@@ -61,7 +60,7 @@ class Home extends Component {
                 index: id
             })
         } 
-        else if (this.state.active === true && this.state.index==id){
+        else if (this.state.active === true && this.state.index === id){
             update_pics[id].likes.count -= 1;
             this.setState({ 
                 uploaded_pics: update_pics
@@ -157,7 +156,7 @@ class Home extends Component {
                                 </div>
                                 <div className="likes">
                                 <Icon style={{fontSize:"35px"}} onClick={() => this.iconClickHandler(pic.likes.count,index)}>
-                                {(this.state.active && this.state.index==index) ?<Favorite className="red" fontSize="large"/>:<FavoriteIcon fontSize="large"/>}
+                                {(this.state.active && this.state.index===index) ?<Favorite className="red" fontSize="large"/>:<FavoriteIcon fontSize="large"/>}
                                 </Icon>
                                 {/*<FavoriteIcon fontSize="large"
                                 className={this.state.dispColor}
