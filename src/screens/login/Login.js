@@ -12,6 +12,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import FormHelperText from '@material-ui/core/FormHelperText';
 import Home from '../home/Home';
+import { Link } from 'react-router-dom';
 
 const styles = theme => ({
     card: {
@@ -53,7 +54,11 @@ class Login extends Component {
         // If Username & Password are same then redirect it to Home Page
         if( (username === this.state.username) && (password === this.state.loginPassword)  ){
             // Redirecting to home page with accessToken Set
-            ReactDOM.render(<Home accessToken={accessToken} />, document.getElementById('root'));
+            this.props.history.push({
+                pathname: '/home',
+                state: { accessToken: accessToken }
+            })
+          //  ReactDOM.render(<Home accessToken={accessToken} />, document.getElementById('root'));
         } else {
             // If Username & Password null then display required error message
             if( this.state.username === ""  ||  this.state.loginPassword === ""){
