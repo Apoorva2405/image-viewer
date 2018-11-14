@@ -16,6 +16,8 @@ import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
 import Icon from "@material-ui/core/Icon";
 import './Home.css';
+import FormHelperText from '@material-ui/core/FormHelperText';
+
 
 class Home extends Component {
     constructor() {
@@ -34,7 +36,8 @@ class Home extends Component {
             active: false,
             dispColor: "transparent",
             likesCount: "",
-            index:""
+            index:"" ,
+            comment: "" ,
         }
     }
 
@@ -66,26 +69,27 @@ class Home extends Component {
         }
 }
 
-    commentClickHandler = () => {
+    // Calling in on clicking comment
+    commentClickHandler = () =>{ 
+        var newStateArray = this.state.comments.slice();
+        newStateArray.push(this.state.comment);
+        this.setState({comments : newStateArray});
+
+        console.log(this.state.comments) ;
+
+        // Clear comment inputbox
 
     }
 
-    inputCommentChangeHandler = (e, index) => {
-       // var comments = this.state.comments.slice();
-        console.log("value "+e.target.value);
-        console.log("index "+index);
-        //comments[index] = e.target.value;
-       // this.setState({comments: comments});
-    }
-
-    
-
-    componentDidMount() {
-        console.log(this.props.accessToken) ;
-        sessionStorage.setItem("access-token", this.props.accessToken);
+    inputCommentChangeHandler = (e) => {
+       this.setState({comment : e.target.value});
     }
 
     componentWillMount() {
+
+        console.log(this.props.accessToken) ;
+        sessionStorage.setItem("access-token", this.props.accessToken);
+
         // get user data
         let data = null;
         let xhr = new XMLHttpRequest();
@@ -164,14 +168,23 @@ class Home extends Component {
                                 </div>
                                 <div>
                                 <Typography>
-                                    {this.state.comments}
-                                </Typography>
+                                 {/* Code to display comments */}
+
+                            <span>
+                            {
+                                this.state.comments.length ? this.state.comments.map((itemTestArray) =>
+                                (<span> {itemTestArray} </span>)) : "-"
+                            }
+                            </span>
+                                    
+                                </Typography>                          
                                 </div>
-                                <FormControl className="comments">
-                                    <InputLabel htmlFor="comment">Add a comment</InputLabel>
+                                
+                                <FormControl className="comments">                                 
+                                    <InputLabel htmlFor="comment">Add a comment</InputLabel>                              
                                     <Input id="comment" type="text"
                                         comment={this.state.comment}
-                                        onChange={this.inputCommentChangeHandler} />
+                                        onBlur={this.inputCommentChangeHandler} />
                                 </FormControl> 
                                 <Button className="button"variant="contained" color="primary" onClick={this.commentClickHandler}>Add</Button> 
                             </CardContent>
