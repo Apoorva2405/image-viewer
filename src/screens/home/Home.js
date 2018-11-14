@@ -86,7 +86,6 @@ class Home extends Component {
     }
 
     componentWillMount() {
-
         console.log(this.props.accessToken) ;
         sessionStorage.setItem("access-token", this.props.accessToken);
 
