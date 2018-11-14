@@ -78,14 +78,12 @@ class Home extends Component {
        // this.setState({comments: comments});
     }
 
-    
+    componentWillMount() {
 
-    componentDidMount() {
+        // Setting access token in session.
         console.log(this.props.accessToken) ;
         sessionStorage.setItem("access-token", this.props.accessToken);
-    }
 
-    componentWillMount() {
         // get user data
         let data = null;
         let xhr = new XMLHttpRequest();
@@ -148,7 +146,7 @@ class Home extends Component {
                                 <div className="tags">
                                 {pic.tags.map(tag => (
                                     <Typography style={{color: '#29B6F6'}}>
-                                        #{tag}
+                                        #{tag} &nbsp;
                                     </Typography>
                                 ))}
                                 </div>
