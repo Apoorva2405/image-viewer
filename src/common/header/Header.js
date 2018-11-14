@@ -12,11 +12,11 @@ import Grow from '@material-ui/core/Grow';
 import Popper from '@material-ui/core/Popper';
 import MenuList from '@material-ui/core/MenuList';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import deepOrange from '@material-ui/core/colors/deepOrange';
 import './Header.css';
 import ReactDOM from 'react-dom';
 import Login from '../../screens/login/Login';
 import Profile from '../../screens/profile/Profile';
+import Home from '../../screens/home/Home';
 
 const styles = theme => ({
   root: {
@@ -38,7 +38,6 @@ const styles = theme => ({
     position: 'relative',
     borderRadius: '4px',
     backgroundColor: '#c0c0c0',
-    marginRight: 10,
     width: '300px',
   },
   searchIcon: {
@@ -68,14 +67,23 @@ const styles = theme => ({
       },
     },
   },
-  orangeAvatar: {
-    color: '#fff',
-    backgroundColor: deepOrange[500],
-    marginRight: 10,
+  iconbtn: {
+    marginRight: 2,
+    marginLeft: 10,
+  },
+  profileiconbtn: {
+    marginLeft: '94%',
+  },
+  avatar: {
+    width: 45,
+    height: 45,
   },
   menuList: {
     backgroundColor: '#c0c0c0',
-  }
+  },
+  menuitem: {
+    padding: '8px',
+  },
 });
 
 const theme = createMuiTheme({
@@ -92,6 +100,7 @@ class Header extends Component {
 
   state = {
     query: '',
+    accessToken: {},
   }
 
   handleInputChange = () => {
@@ -101,9 +110,9 @@ class Header extends Component {
   };
 
   handleToggle = () => {
-   // this.setState(state => ({ open: !state.open }));
+    this.setState(state => ({ open: !state.open }));
     // Redirecting to profile page with accessToken Set
-    ReactDOM.render(<Profile />, document.getElementById('root'));
+    //ReactDOM.render(<Profile />, document.getElementById('root'));
   };
 
   handleClose = event => {
@@ -114,6 +123,11 @@ class Header extends Component {
     this.setState({ open: false });
 
   };
+
+  handleBackToHome = event => {
+    // Redirecting to home page with accessToken Set
+    ReactDOM.render(<Home accessToken={sessionStorage.getItem("access-token")} />, document.getElementById('root'));
+  }
 
 
   logoutHandler = event => {
@@ -160,7 +174,7 @@ class Header extends Component {
     return (
       <div>
         <header >
-          {this.props.showSearchLogo === "true" ?
+          {this.props.showSearchLogo === "true" &&
             <div className={classes.root}>
               <MuiThemeProvider theme={theme}>
                 <AppBar position="static" color='primary'>
@@ -184,32 +198,30 @@ class Header extends Component {
                     }}
                       aria-owns={open ? 'menu-list-grow' : undefined}
                       aria-haspopup="true"
-                      onClick={this.handleToggle}>
+                      onClick={this.handleToggle} className={classes.iconbtn}>
                       {/*<Avatar className={classes.orangeAvatar} >S</Avatar>*/}
-                      <Avatar src={this.state.profile_pic} alt="profile" />
+                      <Avatar src={this.state.profile_pic} className={classes.avatar} alt="profile" />
                     </IconButton>
                     <div className={classes.menuroot}>
-                      <Popper open={open} anchorEl={this.anchorEl} transition disablePortal>
+                      <Popper open={open} anchorEl={this.anchorEl} transition>
                         {({ TransitionProps, placement }) => (
                           <Grow
                             {...TransitionProps}
                             id="menu-list-grow"
                             style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
                           >
-
                             <ClickAwayListener onClickAway={this.handleClose}>
                               <MenuList className={classes.menuList}>
 
                                 {/* On clicking login , calling my account handler */}
-                                <MenuItem onClick={this.myAccountHandler} >My Account</MenuItem>
-                                <hr />
+                                <MenuItem className={classes.menuitem} onClick={this.myAccountHandler} >My Account</MenuItem>
+                                <hr marginLeft='8px' marginRight='8px' />
 
                                 {/* On clicking logout, calling logout handler */}
-                                <MenuItem onClick={this.logoutHandler} >Logout</MenuItem>
+                                <MenuItem className={classes.menuitem} onClick={this.logoutHandler} >Logout</MenuItem>
 
                               </MenuList>
                             </ClickAwayListener>
-
                           </Grow>
                         )}
                       </Popper>
@@ -217,8 +229,53 @@ class Header extends Component {
                   </Toolbar>
                 </AppBar>
               </MuiThemeProvider>
-            </div>
-            : <div className={classes.root}>
+            </div>}
+
+          {this.props.showProfileLogo === "true" &&
+            <div className={classes.root}>
+              <MuiThemeProvider theme={theme}>
+                <AppBar position="static" color='primary'>
+                  <Toolbar>
+                    <p className='app-logo-profile' onClick={this.handleBackToHome}>
+                      Image Viewer</p>
+                    <div className={classes.grow}>
+                      <IconButton buttonRef={node => {
+                        this.anchorEl = node;
+                      }}
+                        aria-owns={open ? 'menu-list-grow' : undefined}
+                        aria-haspopup="true"
+                        onClick={this.handleToggle} className={classes.profileiconbtn}>
+                        {/*<Avatar className={classes.orangeAvatar} >S</Avatar>*/}
+                        <Avatar src={this.state.profile_pic} className={classes.avatar} alt="profile" />
+                      </IconButton>
+                      <div className={classes.menuroot}>
+                        <Popper open={open} anchorEl={this.anchorEl} transition>
+                          {({ TransitionProps, placement }) => (
+                            <Grow
+                              {...TransitionProps}
+                              id="menu-list-grow"
+                              style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
+                            >
+                              <ClickAwayListener onClickAway={this.handleClose}>
+                                <MenuList className={classes.menuList}>
+
+                                  {/* On clicking logout, calling logout handler */}
+                                  <MenuItem className={classes.menuitem} onClick={this.logoutHandler} >Logout</MenuItem>
+
+                                </MenuList>
+                              </ClickAwayListener>
+                            </Grow>
+                          )}
+                        </Popper>
+                      </div>
+
+                    </div>
+                  </Toolbar>
+                </AppBar>
+              </MuiThemeProvider>
+            </div>}
+          {this.props.showLoginHeader === "true" &&
+            <div className={classes.root}>
               <MuiThemeProvider theme={theme}>
                 <AppBar position="static" color='primary'>
                   <Toolbar>
