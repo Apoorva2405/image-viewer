@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
 import Header from '../../common/header/Header';
-import CardHeader from '@material-ui/core/CardHeader';
-import Card from '@material-ui/core/Card';
 import Avatar from '@material-ui/core/Avatar';
 import EditIcon from '@material-ui/icons/Edit';
 import { withStyles } from '@material-ui/core/styles';
-import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';

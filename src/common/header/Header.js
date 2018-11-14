@@ -94,9 +94,12 @@ class Header extends Component {
     query: '',
   }
 
-  handleInputChange = () => {
+  inputChangeHandler = (e) => {
+    sessionStorage.removeItem("query");
+    console.log("input "+e.target.value);
+    sessionStorage.setItem("query",e.target.value)
     this.setState({
-      query: this.search.value
+      // query: this.search.value
     })
   };
   
@@ -159,6 +162,7 @@ class Header extends Component {
                           root: classes.inputRoot,
                           input: classes.inputInput,
                         }}
+                        onChange={this.inputChangeHandler} 
                       />
                     </div>
                     <IconButton buttonRef={node => {

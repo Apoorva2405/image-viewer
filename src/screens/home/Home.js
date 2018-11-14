@@ -16,10 +16,10 @@ import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
 import Icon from "@material-ui/core/Icon";
 import './Home.css';
-import FormHelperText from '@material-ui/core/FormHelperText';
 
 
 class Home extends Component {
+
     constructor() {
         super();
         this.state = {
@@ -38,8 +38,23 @@ class Home extends Component {
             likesCount: "",
             index:"" ,
             comment: "" ,
+            commentIndex:""
         }
     }
+
+    handleInputChange = function(query) {
+        if (query !== "") {
+            var queryResult=[];
+            {this.state.uploaded_pics.map((pic, index) => (
+                pic.caption.text.indexOf(query) !== -1 ? 
+                queryResult.push(pic)
+                : console.log("not matched") 
+            ))}
+            this.setState({
+                uploaded_pics: queryResult
+            })
+        }
+    };
 
     handleChange = () => {
         const currentState = this.state.active;
@@ -61,7 +76,7 @@ class Home extends Component {
                 index: id
             })
         } 
-        else if (this.state.active === true && this.state.index==id){
+        else if (this.state.active === true && this.state.index===id) {
             update_pics[id].likes.count -= 1;
             this.setState({ 
                 uploaded_pics: update_pics
@@ -70,12 +85,24 @@ class Home extends Component {
 }
 
     // Calling in on clicking comment
-    commentClickHandler = () =>{ 
+    commentClickHandler = (id) => { 
         var newStateArray = this.state.comments.slice();
         newStateArray.push(this.state.comment);
-        this.setState({comments : newStateArray});
-
-        console.log(this.state.comments) ;
+        var commentsMap = new Map();
+        commentsMap.set(id, newStateArray);
+        console.log(" newStateArray "+newStateArray);
+        console.log("comment map "+commentsMap.get(id));
+        this.setState({
+            comments : newStateArray,
+            commentIndex: id
+        });
+        
+        // console.log("commentIndex "+this.state.commentIndex);
+        // console.log("comments "+this.state.comments);
+        // for (var i in this.state.comments) {
+        //     console.log("i "+i);
+        // }
+        // console.log("comments String "+JSON.stringify(this.state.comments));
 
         // Clear comment inputbox
 
@@ -116,7 +143,20 @@ class Home extends Component {
                     hashtags: JSON.parse(this.responseText).data.tags,
                     likes: JSON.parse(this.responseText).data.likes,
                     url: JSON.parse(this.responseText).data[0].images.standard_resolution.url
-                });
+                })
+                // var query = sessionStorage.getItem("query");
+                // if (sessionStorage.getItem("query") !== null) {
+                //     console.log("session "+sessionStorage.getItem("query"));
+                //     var queryResult=[];
+                //     that.state.uploaded_pics.map((pic, index) => (
+                //         pic.caption.text.indexOf(query) !== -1 ? 
+                //         queryResult.push(pic)
+                //         : console.log("not matched") 
+                //     ))
+                //     that.setState({
+                //         uploaded_pics: queryResult
+                //     })
+                // }
             }
         });
 
@@ -146,7 +186,7 @@ class Home extends Component {
                                 <img src={pic.images.standard_resolution.url} alt="pic"/>
                                 <Divider/>
                                 <Typography variant="subtitle1">
-                                    {pic.caption.text}
+                                    {pic.caption.text.substring(0, pic.caption.text.indexOf("#"))}
                                 </Typography>
                                 <div className="tags">
                                 {pic.tags.map(tag => (
@@ -157,22 +197,18 @@ class Home extends Component {
                                 </div>
                                 <div className="likes">
                                 <Icon style={{fontSize:"35px"}} onClick={() => this.iconClickHandler(pic.likes.count,index)}>
-                                {(this.state.active && this.state.index==index) ?<Favorite className="red" fontSize="large"/>:<FavoriteIcon fontSize="large"/>}
+                                {(this.state.active && this.state.index===index) ?<Favorite className="red" fontSize="large"/>:<FavoriteIcon fontSize="large"/>}
                                 </Icon>
-                                {/*<FavoriteIcon fontSize="large"
-                                className={this.state.dispColor}
-                                 onClick={() => this.iconClickHandler(pic.likes.count,index)}>
-                                </FavoriteIcon>*/}
                                 <Typography className="right">{pic.likes.count} likes</Typography>
                                 </div>
                                 <div>
                                 <Typography>
                                  {/* Code to display comments */}
-
                             <span>
                             {
-                                this.state.comments.length ? this.state.comments.map((itemTestArray) =>
-                                (<span> {itemTestArray} </span>)) : "-"
+                                (this.state.comments.length && this.state.commentIndex===index) 
+                                ? 
+                                (<span> {this.state.comments.get(index)} </span>) : " "
                             }
                             </span>
                                     
@@ -185,7 +221,8 @@ class Home extends Component {
                                         comment={this.state.comment}
                                         onBlur={this.inputCommentChangeHandler} />
                                 </FormControl> 
-                                <Button className="button"variant="contained" color="primary" onClick={this.commentClickHandler}>Add</Button> 
+                                <Button className="button"variant="contained" color="primary" 
+                                onClick={() => this.commentClickHandler(index)}>Add</Button> 
                             </CardContent>
                         </Card>
                         </GridListTile>
