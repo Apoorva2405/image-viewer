@@ -29,7 +29,11 @@ class Home extends Component {
             profile_pic:"",
             uploaded_pics:[],
             hashtags:[],
-            comments: [],
+            comments: [{ 
+                content: "HURRAY" ,
+                user : "xyz" 
+            }
+           ],
             likes:"",
             date:"",
             caption:"",
@@ -72,10 +76,27 @@ class Home extends Component {
 
     // Calling in on clicking comment
     commentClickHandler = () =>{ 
-        var newStateArray = this.state.comments.slice();
+        let commentsList = [] ;
+      
+      //  commentsList = this.state.comments ;
+        
+        for (let star of this.state.comments) {
+            let starNode = star;
+           
+            starNode.user = this.state.username ;
+            starNode.content = this.state.comment ;
+
+            commentsList.push(starNode);
+        }
+
+        console.log ( commentsList ) ;
+        this.setState({ comments: commentsList });
+
+      /*  var newStateArray = this.state.comments.slice();
         newStateArray.push(this.state.comment);
-        this.setState({comments : newStateArray});
-        // Clear comment inputbox
+        this.setState({comments : newStateArray}); */
+        // TODO : Clear comment inputbox
+
     }
 
     // handler when comment input is provided
@@ -166,10 +187,15 @@ class Home extends Component {
                                 <Typography>
                                  {/* Code to display comments */}
                             <span>
-                            {
+
+                                 {this.state.comments.map(comment => (
+                                     <span> {comment.user} - {comment.content}
+                                    </span>
+                             ))}
+                            {/*     {
                                 this.state.comments.length ? this.state.comments.map((itemTestArray) =>
                                 (<span> {itemTestArray} </span>)) : "-"
-                            }
+                            }   */}
                             </span>
                                     
                                 </Typography>                          
