@@ -16,12 +16,12 @@ import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
 import Icon from "@material-ui/core/Icon";
 import './Home.css';
-import FormHelperText from '@material-ui/core/FormHelperText';
 
 
 class Home extends Component {
     constructor() {
         super();
+        // Intialized State Variables.
         this.state = {
             accessToken: {},
             username:"",
@@ -41,17 +41,16 @@ class Home extends Component {
         }
     }
 
-    handleChange = () => {
-        const currentState = this.state.active;
-        this.setState({ active: !currentState });   
-    }
-
+/**
+ * Handler when favorite icon is clicked
+ */
     iconClickHandler = (count, id) => {
         const currentState = this.state.active;
         this.setState({ 
             active: !currentState
         });
 
+        // increase count when like is clicked
         var update_pics = this.state.uploaded_pics;
         if (this.state.active === false) {
             update_pics[id].likes.count += 1;
@@ -61,7 +60,8 @@ class Home extends Component {
                 index: id
             })
         } 
-        else if (this.state.active === true && this.state.index==id){
+        // decrease count if icon is clicked again for the same index
+        else if (this.state.active === true && this.state.index === id){
             update_pics[id].likes.count -= 1;
             this.setState({ 
                 uploaded_pics: update_pics
@@ -74,25 +74,22 @@ class Home extends Component {
         var newStateArray = this.state.comments.slice();
         newStateArray.push(this.state.comment);
         this.setState({comments : newStateArray});
-
-        console.log(this.state.comments) ;
-
         // Clear comment inputbox
-
     }
 
+    // handler when comment input is provided
     inputCommentChangeHandler = (e) => {
        this.setState({comment : e.target.value});
     }
 
     componentWillMount() {
-        console.log(this.props.accessToken) ;
         sessionStorage.setItem("access-token", this.props.accessToken);
 
         // get user data
         let data = null;
         let xhr = new XMLHttpRequest();
         let that = this;
+        // store profile pic and username
         xhr.addEventListener("readystatechange", function () {
             if (this.readyState === 4) {
                 that.setState({
@@ -105,7 +102,7 @@ class Home extends Component {
         xhr.open("GET", "https://api.instagram.com/v1/users/self/?access_token=" + sessionStorage.getItem("access-token"));
         xhr.send(data);
 
-        // get pictures
+        // get pictures data
         let xhrPic = new XMLHttpRequest();
         xhrPic.addEventListener("readystatechange", function () {
             if (this.readyState === 4) {
@@ -131,6 +128,7 @@ class Home extends Component {
             <div className="home">
                 <Header showSearchLogo="true" />
                 <div  className="flex-container">
+                {/**Post Grids */}
                 <GridList cellHeight="100%" cols={2}>
                   {this.state.uploaded_pics.map((pic, index) => (
                       <GridListTile>
@@ -142,6 +140,7 @@ class Home extends Component {
                             title={this.state.username}
                             subheader = {this.state.date}
                             />
+                            {/**Card Content to display images */}
                             <CardContent>
                                 <img src={pic.images.standard_resolution.url} alt="pic"/>
                                 <Divider/>
@@ -155,20 +154,16 @@ class Home extends Component {
                                     </Typography>
                                 ))}
                                 </div>
+                                {/* Code to display likes */}
                                 <div className="likes">
                                 <Icon style={{fontSize:"35px"}} onClick={() => this.iconClickHandler(pic.likes.count,index)}>
-                                {(this.state.active && this.state.index==index) ?<Favorite className="red" fontSize="large"/>:<FavoriteIcon fontSize="large"/>}
+                                {(this.state.active && this.state.index === index) ?<Favorite className="red" fontSize="large"/>:<FavoriteIcon fontSize="large"/>}
                                 </Icon>
-                                {/*<FavoriteIcon fontSize="large"
-                                className={this.state.dispColor}
-                                 onClick={() => this.iconClickHandler(pic.likes.count,index)}>
-                                </FavoriteIcon>*/}
                                 <Typography className="right">{pic.likes.count} likes</Typography>
                                 </div>
                                 <div>
                                 <Typography>
                                  {/* Code to display comments */}
-
                             <span>
                             {
                                 this.state.comments.length ? this.state.comments.map((itemTestArray) =>
@@ -178,7 +173,7 @@ class Home extends Component {
                                     
                                 </Typography>                          
                                 </div>
-                                
+                                {/** Code for adding comment */}
                                 <FormControl className="comments">                                 
                                     <InputLabel htmlFor="comment">Add a comment</InputLabel>                              
                                     <Input id="comment" type="text"
