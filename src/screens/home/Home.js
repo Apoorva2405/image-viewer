@@ -16,7 +16,7 @@ import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
 import Icon from "@material-ui/core/Icon";
 import './Home.css';
-import moment from 'moment'
+import moment from 'moment';
 
 
 class Home extends Component {
@@ -84,7 +84,6 @@ class Home extends Component {
     }
 
     componentWillMount() {
-        sessionStorage.setItem("access-token", this.props.accessToken);
 
         // get user data
         let data = null;
