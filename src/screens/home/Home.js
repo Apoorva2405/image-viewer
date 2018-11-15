@@ -16,6 +16,7 @@ import Input from '@material-ui/core/Input';
 import Button from '@material-ui/core/Button';
 import Icon from "@material-ui/core/Icon";
 import './Home.css';
+import moment from 'moment'
 
 
 class Home extends Component {
@@ -108,7 +109,7 @@ class Home extends Component {
             if (this.readyState === 4) {
                 var dateReceived = JSON.parse(this.responseText).data[0].created_time;
                 that.setState({
-                    date: new Date(Number(dateReceived)).toISOString(),
+                    date: moment(Number(dateReceived)).format("DD/MM/YYYY hh:mm:ss"),
                     uploaded_pics: JSON.parse(this.responseText).data,
                     hashtags: JSON.parse(this.responseText).data.tags,
                     likes: JSON.parse(this.responseText).data.likes,
@@ -138,7 +139,7 @@ class Home extends Component {
                                 <Avatar src={this.state.profile_pic} alt="profile"/>
                             }
                             title={this.state.username}
-                            subheader = {this.state.date}
+                            subheader = {moment(Number(pic.created_time)).format("DD/MM/YYYY hh:mm:ss")}
                             />
                             {/**Card Content to display images */}
                             <CardContent>
