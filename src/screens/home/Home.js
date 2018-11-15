@@ -74,11 +74,7 @@ class Home extends Component {
         var newStateArray = this.state.comments.slice();
         newStateArray.push(this.state.comment);
         this.setState({comments : newStateArray});
-
-        console.log(this.state.comments) ;
-
         // Clear comment inputbox
-
     }
 
     inputCommentChangeHandler = (e) => {
@@ -86,7 +82,6 @@ class Home extends Component {
     }
 
     componentWillMount() {
-        console.log(this.props.accessToken) ;
         sessionStorage.setItem("access-token", this.props.accessToken);
 
         // get user data
@@ -159,10 +154,6 @@ class Home extends Component {
                                 <Icon style={{fontSize:"35px"}} onClick={() => this.iconClickHandler(pic.likes.count,index)}>
                                 {(this.state.active && this.state.index==index) ?<Favorite className="red" fontSize="large"/>:<FavoriteIcon fontSize="large"/>}
                                 </Icon>
-                                {/*<FavoriteIcon fontSize="large"
-                                className={this.state.dispColor}
-                                 onClick={() => this.iconClickHandler(pic.likes.count,index)}>
-                                </FavoriteIcon>*/}
                                 <Typography className="right">{pic.likes.count} likes</Typography>
                                 </div>
                                 <div>

@@ -140,10 +140,6 @@ class Profile extends Component {
         }
     }
 
-    componentDidMount() {
-        console.log(sessionStorage.getItem("access-token")) ;   
-    }
-
     componentWillMount() {
         // get user data
         let data = null;

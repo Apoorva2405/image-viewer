@@ -131,14 +131,12 @@ class Header extends Component {
 
 
   logoutHandler = event => {
-    console.log("inside logout");
     // Removing accesstoken in session storage on clicking logout 
     sessionStorage.removeItem("access-token");
 
     this.setState({
       loggedIn: false
     });
-    console.log("cleared session storage");
 
     // Redirecting to Login page
     ReactDOM.render(<Login />, document.getElementById('root'));
@@ -159,7 +157,6 @@ class Header extends Component {
     xhr.send(data);
     xhr.addEventListener("readystatechange", function () {
       if (this.readyState === 4) {
-        console.log("response " + xhr.responseText);
         that.setState({
           profile_pic: JSON.parse(this.responseText).data.profile_picture
         });
