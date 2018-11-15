@@ -15,8 +15,7 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import './Header.css';
 import ReactDOM from 'react-dom';
 import Login from '../../screens/login/Login';
-import Profile from '../../screens/profile/Profile';
-import Home from '../../screens/home/Home';
+import { Link } from 'react-router-dom';
 
 const styles = theme => ({
   root: {
@@ -133,14 +132,6 @@ class Header extends Component {
 
   };
 
-/**
- * Handler for redirection to home
- */
-  handleBackToHome = event => {
-    // Redirecting to home page with accessToken Set
-    ReactDOM.render(<Home accessToken={sessionStorage.getItem("access-token")} />, document.getElementById('root'));
-  }
-
 
   logoutHandler = event => {
     // Removing accesstoken in session storage on clicking logout 
@@ -151,13 +142,8 @@ class Header extends Component {
     });
 
     // Redirecting to Login page
-    ReactDOM.render(<Login />, document.getElementById('root'));
+   ReactDOM.render(<Login />, document.getElementById('root'));
 
-  }
-
-  myAccountHandler = event => {
-    // Redirecting to profile page with accessToken Set
-    ReactDOM.render(<Profile />, document.getElementById('root'));
   }
 
   componentWillMount() {
@@ -225,7 +211,10 @@ class Header extends Component {
                               <MenuList className={classes.menuList}>
 
                                 {/* On clicking login , calling my account handler */}
-                                <MenuItem className={classes.menuitem} onClick={this.myAccountHandler} >My Account</MenuItem>
+                                <MenuItem className={classes.menuitem}>
+                                
+                                <Link style={{ textDecoration: 'none', color: 'black' }} to="/profile">My Account</Link>
+                                </MenuItem>
                                 <hr marginLeft='8px' marginRight='8px' />
 
                                 {/* On clicking logout, calling logout handler */}
@@ -248,8 +237,9 @@ class Header extends Component {
                 {/**Header AppBar Code*/}
                 <AppBar position="static" color='primary'>
                   <Toolbar>
-                    <p className='app-logo-profile' onClick={this.handleBackToHome}>
-                      Image Viewer</p>
+                    <p className='app-logo-profile'>
+                    <Link className='app-logo-profile' style={{ textDecoration: 'none'}} to="/home">Image Viewer</Link>
+                    </p>
                     <div className={classes.grow}>
                       <IconButton buttonRef={node => {
                         this.anchorEl = node;
@@ -257,7 +247,6 @@ class Header extends Component {
                         aria-owns={open ? 'menu-list-grow' : undefined}
                         aria-haspopup="true"
                         onClick={this.handleToggle} className={classes.profileiconbtn}>
-                        {/*<Avatar className={classes.orangeAvatar} >S</Avatar>*/}
                         <Avatar src={this.state.profile_pic} className={classes.avatar} alt="profile" />
                       </IconButton>
                       <div className={classes.menuroot}>
