@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import Login from './screens/login/Login';
 import registerServiceWorker from './registerServiceWorker';
 import Controller from './screens/Controller';
 

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './Login.css';
-import ReactDOM from 'react-dom'; 
 import Header from '../../common/header/Header';
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -11,8 +10,6 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import Home from '../home/Home';
-import { Link } from 'react-router-dom';
 
 const styles = theme => ({
     card: {
@@ -54,9 +51,9 @@ class Login extends Component {
         // If Username & Password are same then redirect it to Home Page
         if( (username === this.state.username) && (password === this.state.loginPassword)  ){
             // Redirecting to home page with accessToken Set
+            sessionStorage.setItem("access-token", accessToken);
             this.props.history.push({
-                pathname: '/home',
-                state: { accessToken: accessToken }
+                pathname: '/home'
             })
           //  ReactDOM.render(<Home accessToken={accessToken} />, document.getElementById('root'));
         } else {

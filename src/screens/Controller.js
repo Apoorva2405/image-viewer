@@ -15,9 +15,21 @@ constructor() {
     return (
       <Router >
         <div className="main-container">
-          <Route exact path='/' render={(props) => <Login baseUrl={this.baseUrl} />} />
-          <Route path='/home' render={(props) => <Home {...props} />} baseUrl={this.baseUrl} />
-          <Route path='/profile' render={(props) => <Profile baseUrl={this.baseUrl} />} />
+          <Route exact path='/' render={(props) => <Login  {...props} baseUrl={this.baseUrl} />} />
+          <Route path='/home' render={ (props) => (
+            sessionStorage.getItem("access-token") === null?
+             <Login  {...props}/>
+             :
+             <Home {...props} />
+          )} 
+            baseUrl={this.baseUrl} />
+          <Route path='/profile' render={ (props) => (
+            sessionStorage.getItem("access-token") === null?
+             <Login  {...props}/>
+             :
+             <Profile {...props}/>
+            )} 
+            baseUrl={this.baseUrl} />
         </div>
       </Router>
     )
