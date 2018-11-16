@@ -15,8 +15,7 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import './Header.css';
 import ReactDOM from 'react-dom';
 import Login from '../../screens/login/Login';
-import Profile from '../../screens/profile/Profile';
-import Home from '../../screens/home/Home';
+import { Link } from 'react-router-dom';
 
 const styles = theme => ({
   root: {
@@ -103,18 +102,27 @@ class Header extends Component {
     accessToken: {},
   }
 
+/**
+ * Handler for search input
+ */
   handleInputChange = () => {
     this.setState({
       query: this.search.value
     })
   };
 
+/**
+ * Toggle Handler
+ */
   handleToggle = () => {
     this.setState(state => ({ open: !state.open }));
     // Redirecting to profile page with accessToken Set
     //ReactDOM.render(<Profile />, document.getElementById('root'));
   };
 
+/**
+ * Handler for Closing Menu
+ */
   handleClose = event => {
     if (this.anchorEl.contains(event.target)) {
       return;
@@ -124,30 +132,18 @@ class Header extends Component {
 
   };
 
-  handleBackToHome = event => {
-    // Redirecting to home page with accessToken Set
-    ReactDOM.render(<Home accessToken={sessionStorage.getItem("access-token")} />, document.getElementById('root'));
-  }
-
 
   logoutHandler = event => {
-    console.log("inside logout");
     // Removing accesstoken in session storage on clicking logout 
     sessionStorage.removeItem("access-token");
 
     this.setState({
       loggedIn: false
     });
-    console.log("cleared session storage");
 
     // Redirecting to Login page
-    ReactDOM.render(<Login />, document.getElementById('root'));
+   ReactDOM.render(<Login />, document.getElementById('root'));
 
-  }
-
-  myAccountHandler = event => {
-    // Redirecting to profile page with accessToken Set
-    ReactDOM.render(<Profile />, document.getElementById('root'));
   }
 
   componentWillMount() {
@@ -159,7 +155,6 @@ class Header extends Component {
     xhr.send(data);
     xhr.addEventListener("readystatechange", function () {
       if (this.readyState === 4) {
-        console.log("response " + xhr.responseText);
         that.setState({
           profile_pic: JSON.parse(this.responseText).data.profile_picture
         });
@@ -185,6 +180,7 @@ class Header extends Component {
                       <div className={classes.searchIcon}>
                         <SearchIcon />
                       </div>
+                      {/**Search Code */}
                       <InputBase
                         placeholder="Search…"
                         classes={{
@@ -193,13 +189,14 @@ class Header extends Component {
                         }}
                       />
                     </div>
+                    {/**Menu Button Code */}
                     <IconButton buttonRef={node => {
                       this.anchorEl = node;
                     }}
                       aria-owns={open ? 'menu-list-grow' : undefined}
                       aria-haspopup="true"
                       onClick={this.handleToggle} className={classes.iconbtn}>
-                      {/*<Avatar className={classes.orangeAvatar} >S</Avatar>*/}
+                      {/**View profile */}
                       <Avatar src={this.state.profile_pic} className={classes.avatar} alt="profile" />
                     </IconButton>
                     <div className={classes.menuroot}>
@@ -214,7 +211,10 @@ class Header extends Component {
                               <MenuList className={classes.menuList}>
 
                                 {/* On clicking login , calling my account handler */}
-                                <MenuItem className={classes.menuitem} onClick={this.myAccountHandler} >My Account</MenuItem>
+                                <MenuItem className={classes.menuitem}>
+                                
+                                <Link style={{ textDecoration: 'none', color: 'black' }} to="/profile">My Account</Link>
+                                </MenuItem>
                                 <hr marginLeft='8px' marginRight='8px' />
 
                                 {/* On clicking logout, calling logout handler */}
@@ -234,10 +234,12 @@ class Header extends Component {
           {this.props.showProfileLogo === "true" &&
             <div className={classes.root}>
               <MuiThemeProvider theme={theme}>
+                {/**Header AppBar Code*/}
                 <AppBar position="static" color='primary'>
                   <Toolbar>
-                    <p className='app-logo-profile' onClick={this.handleBackToHome}>
-                      Image Viewer</p>
+                    <p className='app-logo-profile'>
+                    <Link className='app-logo-profile' style={{ textDecoration: 'none'}} to="/home">Image Viewer</Link>
+                    </p>
                     <div className={classes.grow}>
                       <IconButton buttonRef={node => {
                         this.anchorEl = node;
@@ -245,7 +247,6 @@ class Header extends Component {
                         aria-owns={open ? 'menu-list-grow' : undefined}
                         aria-haspopup="true"
                         onClick={this.handleToggle} className={classes.profileiconbtn}>
-                        {/*<Avatar className={classes.orangeAvatar} >S</Avatar>*/}
                         <Avatar src={this.state.profile_pic} className={classes.avatar} alt="profile" />
                       </IconButton>
                       <div className={classes.menuroot}>
