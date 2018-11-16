@@ -30,8 +30,9 @@ class Home extends Component {
             uploaded_pics:[],
             hashtags:[],
             comments: [{ 
-                content: "HURRAY" ,
-                user : "xyz" 
+                content: "" ,
+                user : "" ,
+                id : ""
             }
            ],
             likes:"",
@@ -43,6 +44,7 @@ class Home extends Component {
             likesCount: "",
             index:"" ,
             comment: "" ,
+            id: ""
         }
     }
 
@@ -75,27 +77,21 @@ class Home extends Component {
 }
 
     // Calling in on clicking comment
-    commentClickHandler = () =>{ 
-        let commentsList = [] ;
-      
-      //  commentsList = this.state.comments ;
-        
-        for (let star of this.state.comments) {
-            let starNode = star;
+    commentClickHandler = (id) =>{
+
+        console.log(id) ;
+
+        let commentsList = this.state.comments.slice() ;  
+            
+        let starNode = [];
            
             starNode.user = this.state.username ;
             starNode.content = this.state.comment ;
-
+            starNode.id = id ;
             commentsList.push(starNode);
-        }
 
         console.log ( commentsList ) ;
         this.setState({ comments: commentsList });
-
-      /*  var newStateArray = this.state.comments.slice();
-        newStateArray.push(this.state.comment);
-        this.setState({comments : newStateArray}); */
-        // TODO : Clear comment inputbox
 
     }
 
@@ -134,6 +130,7 @@ class Home extends Component {
                     uploaded_pics: JSON.parse(this.responseText).data,
                     hashtags: JSON.parse(this.responseText).data.tags,
                     likes: JSON.parse(this.responseText).data.likes,
+                    id: JSON.parse(this.responseText).data.id,
                     url: JSON.parse(this.responseText).data[0].images.standard_resolution.url
                 });
             }
@@ -188,8 +185,9 @@ class Home extends Component {
                                  {/* Code to display comments */}
                             <span>
 
+                                {/* Add condition to.id  display it i.e.  pic.id == comment.id  and comments should not be blank    */}
                                  {this.state.comments.map(comment => (
-                                     <span> {comment.user} - {comment.content}
+                                     <span> {comment.user} - {comment.content} - {comment.id}
                                     </span>
                              ))}
                             {/*     {
@@ -207,7 +205,7 @@ class Home extends Component {
                                         comment={this.state.comment}
                                         onBlur={this.inputCommentChangeHandler} />
                                 </FormControl> 
-                                <Button className="button"variant="contained" color="primary" onClick={this.commentClickHandler}>Add</Button> 
+                                <Button className="button"variant="contained" color="primary" onClick={() => this.commentClickHandler(pic.id)}>Add</Button> 
                             </CardContent>
                         </Card>
                         </GridListTile>
