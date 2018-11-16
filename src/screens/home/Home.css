@@ -92,3 +92,9 @@
         margin: 8px;
     }
 }
+.comments-span-heading {
+    font-weight: 900
+}
+.comments-span-content {
+    font-weight: 550
+}

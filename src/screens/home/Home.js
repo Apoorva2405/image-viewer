@@ -91,13 +91,14 @@ class Home extends Component {
             commentsList.push(starNode);
 
         console.log ( commentsList ) ;
-        this.setState({ comments: commentsList });
-
+        this.setState({ comments: commentsList});
     }
 
     // handler when comment input is provided
     inputCommentChangeHandler = (e) => {
        this.setState({comment : e.target.value});
+       //Reset the input filed after submitting the form
+       e.target.value="";
     }
 
     componentWillMount() {
@@ -184,11 +185,17 @@ class Home extends Component {
                                  {/* Code to display comments */}
                             <span>
 
-                                {/* Add condition to.id  display it i.e.  pic.id == comment.id  and comments should not be blank    */}
+                                {/* Condition to display comments */}
+                                
                                  {this.state.comments.map(comment => (
-                                     <span> {comment.user} - {comment.content} - {comment.id}
-                                    </span>
+                                      (pic.id === comment.id && comment.content &&
+                                    <div>
+                                     <span className="comments-span-heading">{comment.user}: </span> 
+                                     <span className="comments-span-content">{comment.content}</span>
+                                     </div>
+                                     )
                              ))}
+                             
                             {/*     {
                                 this.state.comments.length ? this.state.comments.map((itemTestArray) =>
                                 (<span> {itemTestArray} </span>)) : "-"
@@ -198,11 +205,11 @@ class Home extends Component {
                                 </Typography>                          
                                 </div>
                                 {/** Code for adding comment */}
-                                <FormControl className="comments">                                 
-                                    <InputLabel htmlFor="comment">Add a comment</InputLabel>                              
-                                    <Input id="comment" type="text"
+                                <FormControl className="comments" id="addComment">                                 
+                                    <InputLabel htmlFor="comment">Add a comment</InputLabel>                      
+                                    <Input id="comment" type="text" 
                                         comment={this.state.comment}
-                                        onBlur={this.inputCommentChangeHandler} />
+                                        onBlur={this.inputCommentChangeHandler}/>
                                 </FormControl> 
                                 <Button className="button"variant="contained" color="primary" onClick={() => this.commentClickHandler(pic.id)}>Add</Button> 
                             </CardContent>
