@@ -139,6 +139,8 @@ class Profile extends Component {
             active: false,
             dispColor: "transparent",
             clicked: false,
+            picId: "",
+            id: ""
         }
     }
 
@@ -171,7 +173,8 @@ class Profile extends Component {
                 that.setState({
                     uploaded_pics: JSON.parse(this.responseText).data,
                     likes: JSON.parse(this.responseText).data.likes,
-                    url: JSON.parse(this.responseText).data[0].images.standard_resolution.url
+                    url: JSON.parse(this.responseText).data[0].images.standard_resolution.url,
+                    id: JSON.parse(this.responseText).data.id,
                 });
             }
         });
@@ -246,7 +249,8 @@ class Profile extends Component {
             url: pics.images.standard_resolution.url,
             hashtags: pics.tags,
             caption: captionText,
-            likes: pics.likes.count
+            likes: pics.likes.count,
+            picId: pic.id
         });
     }
 
@@ -254,15 +258,14 @@ class Profile extends Component {
     // Calling in on clicking comment
     commentClickHandler =() =>{
 
-        let commentsList = this.state.comments.slice() ;  
-            
+        let commentsList = this.state.comments.slice() ;   
         let starNode = [];
            
             starNode.user = this.state.username ;
             starNode.content = this.state.comment ;
+            starNode.id = this.state.picId;
             commentsList.push(starNode);
-
-        console.log ( commentsList ) ;
+            
         this.setState({ comments: commentsList});
     }
 
@@ -372,9 +375,10 @@ class Profile extends Component {
                                     <span>
 
                                         {/* Condition to display comments */}
-
+                                            {console.log(this.state.picId.id)}
+                                                                                     
                                         {this.state.comments.map(comment => (
-                                            (comment.content &&
+                                            (comment.content && comment.id === this.state.picId &&
                                                 <div>
                                                     <span className="comments-span-heading">{comment.user}: </span>
                                                     <span className="comments-span-content">{comment.content}</span>
