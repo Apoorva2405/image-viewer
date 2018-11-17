@@ -16,6 +16,7 @@ import './Header.css';
 import ReactDOM from 'react-dom';
 import Login from '../../screens/login/Login';
 import { Link } from 'react-router-dom';
+import Paper from '@material-ui/core/Paper';
 
 const styles = theme => ({
   root: {
@@ -203,6 +204,7 @@ class Header extends Component {
                     <div className={classes.menuroot}>
                       <Popper open={open} anchorEl={this.anchorEl} transition>
                         {({ TransitionProps, placement }) => (
+                          <Paper square={false}>
                           <Grow
                             {...TransitionProps}
                             id="menu-list-grow"
@@ -224,6 +226,7 @@ class Header extends Component {
                               </MenuList>
                             </ClickAwayListener>
                           </Grow>
+                          </Paper>
                         )}
                       </Popper>
                     </div>
@@ -258,6 +261,7 @@ class Header extends Component {
                               id="menu-list-grow"
                               style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
                             >
+                            <Paper square={false}>
                               <ClickAwayListener onClickAway={this.handleClose}>
                                 <MenuList className={classes.menuList}>
 
@@ -266,6 +270,7 @@ class Header extends Component {
 
                                 </MenuList>
                               </ClickAwayListener>
+                              </Paper>
                             </Grow>
                           )}
                         </Popper>
