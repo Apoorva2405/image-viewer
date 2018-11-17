@@ -329,7 +329,7 @@ class Profile extends Component {
 
                 {/**Main Profile Page */}
                 <div className={classes.mainDiv}>
-                    <GridList cellHeight="100%" className={classes.gridList} cols={3}>
+                    <GridList cellHeight={300} className={classes.gridList} cols={3}>
                         {this.state.uploaded_pics.map((pic, index) => (
                             <GridListTile key={pic.id}>
                                 <img src={pic.images.standard_resolution.url} alt="pic"
@@ -370,6 +370,7 @@ class Profile extends Component {
                                         </Icon>
                                         <Typography className={classes.rightDiv}>{this.state.likes} likes</Typography>
                                     </div>
+                                    <div>
                                     <Typography>
                                         {/* Code to display comments */}
                                         <span>
@@ -387,6 +388,7 @@ class Profile extends Component {
                                         </span>
 
                                     </Typography>
+                                    </div>
                                     <div className={classes.userDiv}>
                                         <FormControl className={classes.comments}>
                                             <InputLabel htmlFor="comment">Add a comment</InputLabel>

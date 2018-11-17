@@ -19,20 +19,20 @@
 .home {
     display: 'flex';
     flex-wrap: 'wrap';
-    justify-content: 'space-around';
     overflow: 'hidden';
 }
 
 .gridList {
-    margin: 30px;
-    width: 80%;
+    width: 95%;
 }
 
 .flex-container {
     display: flex;
-    justify-content: 'flex-start';
+    justify-content: 'flex-center';
     border-width: 20px;
     border-color: black;
+    margin-left:8%;
+    margin-right: 8%;
 }
 
 .flex-container>div {
