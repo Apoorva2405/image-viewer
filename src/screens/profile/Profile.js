@@ -242,7 +242,7 @@ class Profile extends Component {
         var pics = this.state.uploaded_pics[index];
         var captionReceived = pics.caption.text;
         var captionText = captionReceived.substring(0, captionReceived.indexOf("#"));
-        
+
         this.setState({
             clickedPic: pics,
             clicked: true,
@@ -254,19 +254,19 @@ class Profile extends Component {
         });
     }
 
-   
-    // Calling in on clicking comment
-    commentClickHandler =() =>{
 
-        let commentsList = this.state.comments.slice() ;   
+    // Calling in on clicking comment
+    commentClickHandler = () => {
+
+        let commentsList = this.state.comments.slice();
         let starNode = [];
-           
-            starNode.user = this.state.username ;
-            starNode.content = this.state.comment ;
-            starNode.id = this.state.picId;
-            commentsList.push(starNode);
-            
-        this.setState({ comments: commentsList});
+
+        starNode.user = this.state.username;
+        starNode.content = this.state.comment;
+        starNode.id = this.state.picId;
+        commentsList.push(starNode);
+
+        this.setState({ comments: commentsList });
     }
 
     // handler when comment input is provided
@@ -371,40 +371,39 @@ class Profile extends Component {
                                         <Typography className={classes.rightDiv}>{this.state.likes} likes</Typography>
                                     </div>
                                     <Typography>
-                                    {/* Code to display comments */}
-                                    <span>
+                                        {/* Code to display comments */}
+                                        <span>
 
-                                        {/* Condition to display comments */}
-                                            {console.log(this.state.picId.id)}
-                                                                                     
-                                        {this.state.comments.map(comment => (
-                                            (comment.content && comment.id === this.state.picId &&
-                                                <div>
-                                                    <span className="comments-span-heading">{comment.user}: </span>
-                                                    <span className="comments-span-content">{comment.content}</span>
-                                                </div>
-                                            )
-                                        ))}
+                                            {/* Condition to display comments */}
+                                        
+                                            {this.state.comments.map(comment => (
+                                                (comment.content && comment.id === this.state.picId &&
+                                                    <div>
+                                                        <span className="comments-span-heading">{comment.user}: </span>
+                                                        <span className="comments-span-content">{comment.content}</span>
+                                                    </div>
+                                                )
+                                            ))}
                                         </span>
-                                    
-                                    </Typography>                          
-                                        <div className={classes.userDiv}>
-                                            <FormControl className={classes.comments}>
-                                                <InputLabel htmlFor="comment">Add a comment</InputLabel>
-                                                <Input id="comment" type="text"
-                                                    comment={this.state.comment}
-                                                    onBlur={this.inputCommentChangeHandler} />
-                                            </FormControl>
-                                            <Button className={classes.button} variant="contained" color="primary" onClick={this.commentClickHandler}>Add</Button>
-                                        </div>
-                      </div>
+
+                                    </Typography>
+                                    <div className={classes.userDiv}>
+                                        <FormControl className={classes.comments}>
+                                            <InputLabel htmlFor="comment">Add a comment</InputLabel>
+                                            <Input id="comment" type="text"
+                                                comment={this.state.comment}
+                                                onBlur={this.inputCommentChangeHandler} />
+                                        </FormControl>
+                                        <Button className={classes.button} variant="contained" color="primary" onClick={this.commentClickHandler}>Add</Button>
+                                    </div>
                                 </div>
                             </div>
-            </Modal>
+                        </div>
+                    </Modal>
                 </div>
-                </div>
-                )
-            }
-        }
-        
-export default withStyles(styles) (Profile);
+            </div>
+        )
+    }
+}
+
+export default withStyles(styles)(Profile);
