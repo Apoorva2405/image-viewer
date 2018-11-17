@@ -100,6 +100,7 @@ class Header extends Component {
   state = {
     query: '',
     accessToken: {},
+    open:false,
   }
 
 /**
@@ -215,7 +216,7 @@ class Header extends Component {
                                 
                                 <Link style={{ textDecoration: 'none', color: 'black' }} to="/profile">My Account</Link>
                                 </MenuItem>
-                                <hr marginLeft='8px' marginRight='8px' />
+                                <hr marginleft='8px' marginright='8px' />
 
                                 {/* On clicking logout, calling logout handler */}
                                 <MenuItem className={classes.menuitem} onClick={this.logoutHandler} >Logout</MenuItem>
