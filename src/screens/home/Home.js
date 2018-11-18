@@ -77,7 +77,7 @@ class Home extends Component {
         }
 }
 
-// Calling in on clicking comment
+// Calling in on clicking search
 searchClickHandler = (query) => {
     var queryResult=[];
     if (query !== "") {
@@ -172,7 +172,7 @@ searchClickHandler = (query) => {
                 {/**Post Grids */}
                 <GridList cellHeight= "100%" cols={2}>
                   {this.state.uploaded_pics.map((pic, index) => (
-                      <GridListTile>
+                      <GridListTile style={{ height: 'auto', width: 700 }}>>
                         <Card className= "gridList">
                             <CardHeader
                             avatar={
