@@ -180,6 +180,7 @@ class Header extends Component {
     const { open } = this.state;
     return (
       <div>
+        {/**Header Code */}
         <header >
           {this.props.showSearchLogo === "true" &&
             <div className={classes.root}>
@@ -246,7 +247,7 @@ class Header extends Component {
                 </AppBar>
               </MuiThemeProvider>
             </div>}
-
+          {/**Header for Profile Code */}
           {this.props.showProfileLogo === "true" &&
             <div className={classes.root}>
               <MuiThemeProvider theme={theme}>
@@ -289,7 +290,7 @@ class Header extends Component {
                           )}
                         </Popper>
                       </div>
-
+                    {/**Image Viewer Code */}
                     </div>
                   </Toolbar>
                 </AppBar>
