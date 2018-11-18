@@ -29,7 +29,12 @@ class Home extends Component {
             profile_pic:"",
             uploaded_pics:[],
             hashtags:[],
-            comments: [],
+            comments: [{ 
+                content: "" ,
+                user : "" ,
+                id : ""
+            }
+           ],
             likes:"",
             date:"",
             caption:"",
@@ -39,6 +44,7 @@ class Home extends Component {
             likesCount: "",
             index:"" ,
             comment: "" ,
+            id: ""
         }
     }
 
@@ -70,17 +76,39 @@ class Home extends Component {
         }
 }
 
+// Calling in on clicking comment
+searchClickHandler = (query) =>{
+
+    console.log("Inside") ;
+    console.log(query) ;
+    console.log(sessionStorage.getItem("query") );
+
+   
+}
+
     // Calling in on clicking comment
-    commentClickHandler = () =>{ 
-        var newStateArray = this.state.comments.slice();
-        newStateArray.push(this.state.comment);
-        this.setState({comments : newStateArray});
-        // Clear comment inputbox
+    commentClickHandler = (id) =>{
+
+        console.log(id) ;
+
+        let commentsList = this.state.comments.slice() ;  
+            
+        let starNode = [];
+           
+            starNode.user = this.state.username ;
+            starNode.content = this.state.comment ;
+            starNode.id = id ;
+            commentsList.push(starNode);
+
+        console.log ( commentsList ) ;
+        this.setState({ comments: commentsList});
     }
 
     // handler when comment input is provided
     inputCommentChangeHandler = (e) => {
        this.setState({comment : e.target.value});
+       //Reset the input filed after submitting the form
+       e.target.value="";
     }
 
     componentWillMount() {
@@ -112,6 +140,7 @@ class Home extends Component {
                     uploaded_pics: JSON.parse(this.responseText).data,
                     hashtags: JSON.parse(this.responseText).data.tags,
                     likes: JSON.parse(this.responseText).data.likes,
+                    id: JSON.parse(this.responseText).data.id,
                     url: JSON.parse(this.responseText).data[0].images.standard_resolution.url
                 });
             }
@@ -126,10 +155,10 @@ class Home extends Component {
     render() {
         return (
             <div className="home">
-                <Header showSearchLogo="true" />
+                <Header showSearchLogo="true"  searchClickHandler={this.searchClickHandler} />
                 <div  className="flex-container">
                 {/**Post Grids */}
-                <GridList cellHeight="100%" cols={2}>
+                <GridList cellHeight={1000} cols={2}>
                   {this.state.uploaded_pics.map((pic, index) => (
                       <GridListTile>
                         <Card className= "gridList">
@@ -165,22 +194,34 @@ class Home extends Component {
                                 <Typography>
                                  {/* Code to display comments */}
                             <span>
-                            {
+
+                                {/* Condition to display comments */}
+                                
+                                 {this.state.comments.map(comment => (
+                                      (pic.id === comment.id && comment.content &&
+                                    <div>
+                                     <span className="comments-span-heading">{comment.user}: </span> 
+                                     <span className="comments-span-content">{comment.content}</span>
+                                     </div>
+                                     )
+                             ))}
+                             
+                            {/*     {
                                 this.state.comments.length ? this.state.comments.map((itemTestArray) =>
                                 (<span> {itemTestArray} </span>)) : "-"
-                            }
+                            }   */}
                             </span>
                                     
                                 </Typography>                          
                                 </div>
                                 {/** Code for adding comment */}
-                                <FormControl className="comments">                                 
-                                    <InputLabel htmlFor="comment">Add a comment</InputLabel>                              
-                                    <Input id="comment" type="text"
+                                <FormControl className="comments" id="addComment">                                 
+                                    <InputLabel htmlFor="comment">Add a comment</InputLabel>                      
+                                    <Input id="comment" type="text" 
                                         comment={this.state.comment}
-                                        onBlur={this.inputCommentChangeHandler} />
+                                        onBlur={this.inputCommentChangeHandler}/>
                                 </FormControl> 
-                                <Button className="button"variant="contained" color="primary" onClick={this.commentClickHandler}>Add</Button> 
+                                <Button className="button"variant="contained" color="primary" onClick={() => this.commentClickHandler(pic.id)}>Add</Button> 
                             </CardContent>
                         </Card>
                         </GridListTile>

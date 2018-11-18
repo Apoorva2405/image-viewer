@@ -16,6 +16,7 @@ import './Header.css';
 import ReactDOM from 'react-dom';
 import Login from '../../screens/login/Login';
 import { Link } from 'react-router-dom';
+import Paper from '@material-ui/core/Paper';
 
 const styles = theme => ({
   root: {
@@ -100,6 +101,7 @@ class Header extends Component {
   state = {
     query: '',
     accessToken: {},
+    open:false,
   }
 
 /**
@@ -132,6 +134,15 @@ class Header extends Component {
 
   };
 
+  inputChangeHandler = (e) => {
+    sessionStorage.removeItem("query");
+    sessionStorage.setItem("query",e.target.value);
+    this.setState({
+      query: e.target.value
+    });
+
+    this.props.searchClickHandler(e.target.value) ;
+  };
 
   logoutHandler = event => {
     // Removing accesstoken in session storage on clicking logout 
@@ -186,7 +197,7 @@ class Header extends Component {
                         classes={{
                           root: classes.inputRoot,
                           input: classes.inputInput,
-                        }}
+                        }} onChange={this.inputChangeHandler} 
                       />
                     </div>
                     {/**Menu Button Code */}
@@ -202,6 +213,7 @@ class Header extends Component {
                     <div className={classes.menuroot}>
                       <Popper open={open} anchorEl={this.anchorEl} transition>
                         {({ TransitionProps, placement }) => (
+                          <Paper square={false}>
                           <Grow
                             {...TransitionProps}
                             id="menu-list-grow"
@@ -215,7 +227,7 @@ class Header extends Component {
                                 
                                 <Link style={{ textDecoration: 'none', color: 'black' }} to="/profile">My Account</Link>
                                 </MenuItem>
-                                <hr marginLeft='8px' marginRight='8px' />
+                                <hr marginleft='8px' marginright='8px' />
 
                                 {/* On clicking logout, calling logout handler */}
                                 <MenuItem className={classes.menuitem} onClick={this.logoutHandler} >Logout</MenuItem>
@@ -223,6 +235,7 @@ class Header extends Component {
                               </MenuList>
                             </ClickAwayListener>
                           </Grow>
+                          </Paper>
                         )}
                       </Popper>
                     </div>
@@ -257,6 +270,7 @@ class Header extends Component {
                               id="menu-list-grow"
                               style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
                             >
+                            <Paper square={false}>
                               <ClickAwayListener onClickAway={this.handleClose}>
                                 <MenuList className={classes.menuList}>
 
@@ -265,6 +279,7 @@ class Header extends Component {
 
                                 </MenuList>
                               </ClickAwayListener>
+                              </Paper>
                             </Grow>
                           )}
                         </Popper>
