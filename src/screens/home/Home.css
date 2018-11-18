@@ -19,16 +19,18 @@
 .home {
     display: 'flex';
     flex-wrap: 'wrap';
+    justify-content: 'space-around';
     overflow: 'hidden';
 }
 
 .gridList {
-    width: 95%;
+    margin: 30px;
+    width: 90%;
 }
 
 .flex-container {
     display: flex;
-    justify-content: 'flex-center';
+    justify-content: 'flex-start';
     border-width: 20px;
     border-color: black;
     margin-left:8%;
