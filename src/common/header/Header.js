@@ -13,8 +13,6 @@ import Popper from '@material-ui/core/Popper';
 import MenuList from '@material-ui/core/MenuList';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import './Header.css';
-import ReactDOM from 'react-dom';
-import Login from '../../screens/login/Login';
 import { Link } from 'react-router-dom';
 import Paper from '@material-ui/core/Paper';
 
@@ -153,7 +151,7 @@ class Header extends Component {
     });
 
     // Redirecting to Login page
-   ReactDOM.render(<Login />, document.getElementById('root'));
+  // ReactDOM.render(<Login />, document.getElementById('root'));
 
   }
 
@@ -230,7 +228,9 @@ class Header extends Component {
                                 <hr marginleft='8px' marginright='8px' />
 
                                 {/* On clicking logout, calling logout handler */}
-                                <MenuItem className={classes.menuitem} onClick={this.logoutHandler} >Logout</MenuItem>
+                                <MenuItem className={classes.menuitem}>
+                                <Link style={{ textDecoration: 'none', color: 'black' }} onClick={this.logoutHandler} to="/">Logout</Link>
+                                </MenuItem>
 
                               </MenuList>
                             </ClickAwayListener>
