@@ -76,6 +76,16 @@ class Home extends Component {
         }
 }
 
+// Calling in on clicking comment
+searchClickHandler = (query) =>{
+
+    console.log("Inside") ;
+    console.log(query) ;
+    console.log(sessionStorage.getItem("query") );
+
+   
+}
+
     // Calling in on clicking comment
     commentClickHandler = (id) =>{
 
@@ -145,7 +155,7 @@ class Home extends Component {
     render() {
         return (
             <div className="home">
-                <Header showSearchLogo="true" />
+                <Header showSearchLogo="true"  searchClickHandler={this.searchClickHandler} />
                 <div  className="flex-container">
                 {/**Post Grids */}
                 <GridList cellHeight={1000} cols={2}>

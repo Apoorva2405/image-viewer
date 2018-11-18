@@ -134,6 +134,15 @@ class Header extends Component {
 
   };
 
+  inputChangeHandler = (e) => {
+    sessionStorage.removeItem("query");
+    sessionStorage.setItem("query",e.target.value);
+    this.setState({
+      query: e.target.value
+    });
+
+    this.props.searchClickHandler(e.target.value) ;
+  };
 
   logoutHandler = event => {
     // Removing accesstoken in session storage on clicking logout 
@@ -188,7 +197,7 @@ class Header extends Component {
                         classes={{
                           root: classes.inputRoot,
                           input: classes.inputInput,
-                        }}
+                        }} onChange={this.inputChangeHandler} 
                       />
                     </div>
                     {/**Menu Button Code */}
