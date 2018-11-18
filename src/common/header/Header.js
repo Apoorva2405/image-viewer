@@ -278,7 +278,9 @@ class Header extends Component {
                                 <MenuList className={classes.menuList}>
 
                                   {/* On clicking logout, calling logout handler */}
-                                  <MenuItem className={classes.menuitem} onClick={this.logoutHandler} >Logout</MenuItem>
+                                <MenuItem className={classes.menuitem}>
+                                <Link style={{ textDecoration: 'none', color: 'black' }} onClick={this.logoutHandler} to="/">Logout</Link>
+                                </MenuItem>
 
                                 </MenuList>
                               </ClickAwayListener>
