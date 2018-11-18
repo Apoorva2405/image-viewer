@@ -82,7 +82,7 @@ searchClickHandler = (query) => {
     var queryResult=[];
     if (query !== "") {
         this.state.uploaded_pics.map((pic, index) => (
-            pic.caption.text.indexOf(query) !== -1 ? 
+            (pic.caption.text.substring(0, pic.caption.text.indexOf("#"))).indexOf(query) !== -1 ? 
             queryResult.push(pic)
             : console.log("not matched")
         ))
@@ -186,7 +186,7 @@ searchClickHandler = (query) => {
                                 <img src={pic.images.standard_resolution.url} alt="pic"/>
                                 <Divider/>
                                 <Typography variant="subtitle1">
-                                    {pic.caption.text}
+                                    {pic.caption.text.substring(0, pic.caption.text.indexOf("#"))}
                                 </Typography>
                                 <div className="tags">
                                 {pic.tags.map(tag => (
