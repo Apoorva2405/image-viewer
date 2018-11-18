@@ -157,6 +157,9 @@ class Header extends Component {
 
   componentWillMount() {
     // get user profile pic data
+
+    if( sessionStorage.getItem("access-token") != null)
+    {
     let data = null;
     let xhr = new XMLHttpRequest();
     let that = this;
@@ -169,8 +172,8 @@ class Header extends Component {
         });
       }
     });
-
-  }
+  } 
+}
 
   render() {
     const { classes } = this.props;

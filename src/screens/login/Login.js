@@ -78,7 +78,7 @@ class Login extends Component {
         const { classes } = this.props;
         return (
             <div>
-                <Header showLoginHeader="true" />
+                <Header showLoginHeader="true"  />
                 <div>
                 <Card className={classes.card}>
                     <CardContent className={classes.content}>
