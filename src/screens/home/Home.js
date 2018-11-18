@@ -28,6 +28,7 @@ class Home extends Component {
             username:"",
             profile_pic:"",
             uploaded_pics:[],
+            images:[],
             hashtags:[],
             comments: [{ 
                 content: "" ,
@@ -77,13 +78,23 @@ class Home extends Component {
 }
 
 // Calling in on clicking comment
-searchClickHandler = (query) =>{
-
-    console.log("Inside") ;
-    console.log(query) ;
-    console.log(sessionStorage.getItem("query") );
-
-   
+searchClickHandler = (query) => {
+    var queryResult=[];
+    if (query !== "") {
+        this.state.uploaded_pics.map((pic, index) => (
+            pic.caption.text.indexOf(query) !== -1 ? 
+            queryResult.push(pic)
+            : console.log("not matched")
+        ))
+        this.setState({
+            uploaded_pics: queryResult
+        })
+    }
+    else {
+        this.setState({
+            uploaded_pics: this.state.images
+        })
+    }
 }
 
     // Calling in on clicking comment
@@ -138,6 +149,7 @@ searchClickHandler = (query) =>{
                 that.setState({
                     date: moment(Number(dateReceived)).format("DD/MM/YYYY hh:mm:ss"),
                     uploaded_pics: JSON.parse(this.responseText).data,
+                    images: JSON.parse(this.responseText).data,
                     hashtags: JSON.parse(this.responseText).data.tags,
                     likes: JSON.parse(this.responseText).data.likes,
                     id: JSON.parse(this.responseText).data.id,

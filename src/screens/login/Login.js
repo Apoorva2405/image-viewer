@@ -10,8 +10,6 @@ import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
 import FormHelperText from '@material-ui/core/FormHelperText';
-import ReactDOM from 'react-dom';
-import Home from '../../screens/home/Home';
 
 
 const styles = theme => ({
@@ -55,10 +53,11 @@ class Login extends Component {
         if( (username === this.state.username) && (password === this.state.loginPassword)  ){
             // Redirecting to home page with accessToken Set
             sessionStorage.setItem("access-token", accessToken);
-         {/*   this.props.history.push({
-                pathname: '/home'
-            })  */}
-            ReactDOM.render(<Home accessToken={accessToken} />, document.getElementById('root'));
+            this.props.history.push({
+                    pathname: '/home'
+                })  
+            
+           // ReactDOM.render(<Home accessToken={accessToken} />, document.getElementById('root'));
         } else {
             // If Username & Password null then display required error message
             if( this.state.username === ""  ||  this.state.loginPassword === ""){
