@@ -160,7 +160,7 @@ class Header extends Component {
     let data = null;
     let xhr = new XMLHttpRequest();
     let that = this;
-    xhr.open("GET", "https://api.instagram.com/v1/users/self/?access_token=8661035776.d0fcd39.87fd934e04f84253aaf234d8bd4e4c65");
+    xhr.open("GET", "https://api.instagram.com/v1/users/self/?access_token="+sessionStorage.getItem("access-token"));
     xhr.send(data);
     xhr.addEventListener("readystatechange", function () {
       if (this.readyState === 4) {

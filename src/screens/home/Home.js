@@ -170,7 +170,7 @@ searchClickHandler = (query) => {
                 <Header showSearchLogo="true"  searchClickHandler={this.searchClickHandler} />
                 <div  className="flex-container">
                 {/**Post Grids */}
-                <GridList cellHeight={1000} cols={2}>
+                <GridList cellHeight= "100%" cols={2}>
                   {this.state.uploaded_pics.map((pic, index) => (
                       <GridListTile>
                         <Card className= "gridList">
